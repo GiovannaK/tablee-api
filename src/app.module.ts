@@ -7,6 +7,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
+import { EmailModule } from './email/email.module';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
 
 @Module({
   imports: [
@@ -17,6 +19,10 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     UserModule,
+    EmailModule,
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_SECRET_KEY,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
