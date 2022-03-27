@@ -45,7 +45,7 @@ export class User {
     length: 11,
     nullable: true,
   })
-  secondaryPhone: string;
+  secondaryPhone?: string;
 
   @Column({ default: false })
   isRegisteredWithGoogle: boolean;
@@ -55,22 +55,23 @@ export class User {
     enum: UserRole,
     default: UserRole.USER,
   })
+  @Field(() => UserRole)
   role: UserRole;
 
   @Column({
     nullable: true,
   })
-  loginToken: string;
+  loginToken?: string;
 
   @Column({
     nullable: true,
   })
-  expirationLoginToken: string;
+  expirationLoginToken?: string;
 
   @Column({
     nullable: true,
   })
-  stripeCustomerId: string;
+  stripeCustomerId?: string;
 
   @DeleteDateColumn()
   deletedAt: Date;

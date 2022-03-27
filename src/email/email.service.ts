@@ -8,7 +8,7 @@ export class EmailService {
   async sendMail(to: string, subject: string, text: string): Promise<void> {
     await this.sendGrid.send({
       to,
-      from: process.env.EMAIL_HOST,
+      from: process.env.SENDGRID_EMAIL_HOST,
       subject,
       text,
     });
