@@ -31,12 +31,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type AuthType {
+  user: User!
+  loginToken: String!
+}
+
 type Query {
   sayHello: String!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
+  validateUser(data: ValidateUserInput!): AuthType!
+  signin(data: SigninInput!): User!
 }
 
 input CreateUserInput {
@@ -45,4 +52,12 @@ input CreateUserInput {
   email: String!
   mainPhone: String!
   secondaryPhone: String
+}
+
+input ValidateUserInput {
+  loginToken: String!
+}
+
+input SigninInput {
+  email: String!
 }

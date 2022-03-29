@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from '../email/email.service';
@@ -31,11 +32,19 @@ export class UserService {
   }
 
   async isEmailAlreadyExists(email: string): Promise<void> {
-    const user = await this.userRepository.findOne({ email });
+    const user = await this.getUserByEmail(email);
     if (user) {
-      throw new BadRequestException(`${email} already in use`);
+      throw new BadRequestException(`Email ${email} already in use`);
     }
     return;
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ email });
+    if (!user) {
+      throw new BadRequestException(`Cannot found user by ${email}`);
+    }
+    return user;
   }
 
   async createUser(createUserInput: CreateUserInput) {
@@ -63,5 +72,13 @@ export class UserService {
     await this.emailService.sendMail(createdUser.email, subject, text);
 
     return createdUser;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+    if (!user) {
+      throw new NotFoundException(`Cannot found user by id:${id}`);
+    }
+    return user;
   }
 }
