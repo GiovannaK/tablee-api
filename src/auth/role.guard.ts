@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UserRole } from '../user/entities/role/userRole';
 import { ROLES_KEY } from './userRoles.decorator';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -13,6 +14,7 @@ export class RolesGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const ctx = GqlExecutionContext.create(context);
+    const request = ctx.getContext().req;
     const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
@@ -22,8 +24,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { user } = ctx.getContext().req;
-    console.log('USER_GUARD', user);
-    return requiredRoles.some((role) => user.role?.includes(role));
+    const { user } = request;
+    const upperCaseRole = user.role?.toUpperCase();
+    return requiredRoles.some((role) => upperCaseRole.includes(role));
   }
 }

@@ -22,12 +22,6 @@ export class AuthResolver {
     @Args('data') data: ValidateUserInput,
   ): Promise<AuthType> {
     const getToken = await this.authService.validateUser(data.loginToken);
-    context.res.cookie('access_token', getToken.token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: false,
-      sameSite: 'none',
-    });
     return {
       user: getToken.updatedUser,
       loginToken: getToken.token,
