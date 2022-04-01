@@ -32,7 +32,7 @@ export class UserService {
   }
 
   async isEmailAlreadyExists(email: string): Promise<void> {
-    const user = await this.getUserByEmail(email);
+    const user = await this.userRepository.findOne({ email });
     if (user) {
       throw new BadRequestException(`Email ${email} already in use`);
     }

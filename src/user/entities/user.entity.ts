@@ -73,6 +73,11 @@ export class User {
   })
   stripeCustomerId?: string;
 
+  @Column({
+    nullable: true,
+  })
+  avatarUrl?: string;
+
   @DeleteDateColumn()
   deletedAt: Date;
 

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { UserRole } from '../user/entities/role/userRole';
 import { ROLES_KEY } from './userRoles.decorator';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -25,7 +24,7 @@ export class RolesGuard implements CanActivate {
     }
 
     const { user } = request;
-    const upperCaseRole = user.role?.toUpperCase();
-    return requiredRoles.some((role) => upperCaseRole.includes(role));
+    const userRole = user.role;
+    return requiredRoles.some((role) => userRole?.includes(role));
   }
 }

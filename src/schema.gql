@@ -14,6 +14,7 @@ type User {
   loginToken: String
   expirationLoginToken: String
   stripeCustomerId: String
+  avatarUrl: String
   deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
