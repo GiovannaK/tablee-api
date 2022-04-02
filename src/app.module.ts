@@ -10,6 +10,8 @@ import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
+import { ProfileModule } from './profile/profile.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -38,6 +40,8 @@ import * as Joi from '@hapi/joi';
       apikey: process.env.SENDGRID_SECRET_KEY,
     }),
     AuthModule,
+    FileModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

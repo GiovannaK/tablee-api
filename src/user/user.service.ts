@@ -56,12 +56,13 @@ export class UserService {
       ...createUserInput,
       loginToken,
       expirationLoginToken,
+      profile: {},
     });
 
     const createdUser = await this.userRepository.save(user);
 
     if (!createdUser) {
-      throw new InternalServerErrorException('User could not be created');
+      throw new InternalServerErrorException('Cannot create user');
     }
 
     const subject = 'Tablee: Faça login para continuar';
@@ -75,7 +76,7 @@ export class UserService {
   }
 
   async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ id });
+    const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException(`Cannot found user by id:${id}`);
     }

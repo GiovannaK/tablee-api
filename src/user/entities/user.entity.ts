@@ -1,9 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Profile } from '../../profile/entities/profile.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -73,10 +76,10 @@ export class User {
   })
   stripeCustomerId?: string;
 
-  @Column({
-    nullable: true,
-  })
-  avatarUrl?: string;
+  @Field(() => Profile, { nullable: true })
+  @OneToOne(() => Profile, { cascade: true })
+  @JoinColumn()
+  profile: Profile;
 
   @DeleteDateColumn()
   deletedAt: Date;

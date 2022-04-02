@@ -7,6 +7,7 @@ import { CreateUserInput } from './dto/create-user.Input';
 import { UserRole } from './entities/role/userRole';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { Profile } from 'src/profile/entities/profile.entity';
 
 @Resolver('User')
 export class UserResolver {

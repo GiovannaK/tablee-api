@@ -56,7 +56,6 @@ export class AuthService {
     `;
 
     await this.emailService.sendMail(user.email, subject, text);
-    console.log(updatedUser);
     return updatedUser;
   }
 
