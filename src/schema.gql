@@ -24,7 +24,7 @@ type User {
   firstName: String!
   lastName: String!
   email: String!
-  mainPhone: String!
+  mainPhone: String
   secondaryPhone: String
   isRegisteredWithGoogle: Boolean!
   loginToken: String
@@ -55,6 +55,7 @@ type Mutation {
   createUser(data: CreateUserInput!): User!
   validateUser(data: ValidateUserInput!): AuthType!
   signin(data: SigninInput!): User!
+  signinWithGoogle(data: GoogleAuthInput!): AuthType!
 }
 
 input CreateUserInput {
@@ -71,4 +72,8 @@ input ValidateUserInput {
 
 input SigninInput {
   email: String!
+}
+
+input GoogleAuthInput {
+  token: String!
 }

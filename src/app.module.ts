@@ -12,6 +12,7 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ProfileModule } from './profile/profile.module';
+import { GoogleauthModule } from './googleauth/googleauth.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -42,6 +43,7 @@ import * as Joi from '@hapi/joi';
     AuthModule,
     FileModule,
     ProfileModule,
+    GoogleauthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

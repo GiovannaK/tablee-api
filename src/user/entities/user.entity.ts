@@ -40,9 +40,9 @@ export class User {
 
   @Column({
     length: 11,
-    nullable: false,
+    nullable: true,
   })
-  mainPhone: string;
+  mainPhone?: string;
 
   @Column({
     length: 11,

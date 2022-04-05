@@ -8,13 +8,6 @@ import { UserService } from 'src/user/user.service';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly userService: UserService) {
     super({
-      // jwtFromRequest: (ctx: ExecutionContext) => {
-      //   console.log('CONTEXT', ctx);
-      //   const context = GqlExecutionContext.create(ctx);
-      //   const req = context.getContext().req;
-      //   console.log('cooki', req.cookies);
-      //   return req.cookies['access_token'];
-      // },
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,

@@ -91,7 +91,7 @@ export class AuthService {
     };
   }
 
-  private async jwtToken(user: User) {
+  async jwtToken(user: User) {
     const payload = { role: user.role, sub: user.id, email: user.email };
     return this.jwtService.signAsync(payload);
   }
