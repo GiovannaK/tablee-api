@@ -10,6 +10,7 @@ import { EmailService } from '../email/email.service';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.Input';
+import { StripeService } from '../stripe/stripe.service';
 const crypto = require('crypto');
 
 @Injectable()
@@ -18,6 +19,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly emailService: EmailService,
+    private readonly stripeService: StripeService,
   ) {}
 
   generateLoginToken() {
@@ -52,10 +54,16 @@ export class UserService {
     const loginToken = this.generateLoginToken();
     const expirationLoginToken = String(this.generateLoginTokenExpiration());
 
+    const stripeCustomer = await this.stripeService.createCustomer(
+      `${createUserInput.firstName} ${createUserInput.lastName}`,
+      createUserInput.email,
+    );
+
     const user = await this.userRepository.create({
       ...createUserInput,
       loginToken,
       expirationLoginToken,
+      stripeCustomerId: stripeCustomer.id,
       profile: {},
     });
 

@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { ProfileModule } from './profile/profile.module';
 import { GoogleauthModule } from './googleauth/googleauth.module';
+import { StripeModule } from './stripe/stripe.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -44,6 +45,7 @@ import * as Joi from '@hapi/joi';
     FileModule,
     ProfileModule,
     GoogleauthModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
