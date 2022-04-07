@@ -1,12 +1,11 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/role.guard';
-import { Roles } from 'src/auth/userRoles.decorator';
 import { CreateUserInput } from './dto/create-user.Input';
-import { UserRole } from './entities/role/userRole';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { CurrentUser } from './decorators/currentUser.decorator';
 
 @Resolver('User')
 export class UserResolver {
@@ -18,10 +17,10 @@ export class UserResolver {
     return user;
   }
 
-  @Roles(UserRole.OWNER, UserRole.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Query(() => String)
-  sayHello(): string {
-    return 'Hello World!';
+  @Query(() => User)
+  async getCurrentUser(@CurrentUser() currentUser: User): Promise<User> {
+    const user = await this.userService.getUserById(currentUser.id);
+    return user;
   }
 }

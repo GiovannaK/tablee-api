@@ -48,7 +48,7 @@ type AuthType {
 }
 
 type Query {
-  sayHello: String!
+  getCurrentUser: User!
 }
 
 type Mutation {
