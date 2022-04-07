@@ -56,6 +56,7 @@ type Mutation {
   validateUser(data: ValidateUserInput!): AuthType!
   signin(data: SigninInput!): User!
   signinWithGoogle(data: GoogleAuthInput!): AuthType!
+  createOwner(data: CreateOwnerInput!): User!
 }
 
 input CreateUserInput {
@@ -76,4 +77,12 @@ input SigninInput {
 
 input GoogleAuthInput {
   token: String!
+}
+
+input CreateOwnerInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  mainPhone: String
+  secondaryPhone: String
 }
