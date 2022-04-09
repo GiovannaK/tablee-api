@@ -6,11 +6,13 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './role/userRole';
+import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 
 @ObjectType()
 @Entity()
@@ -42,13 +44,13 @@ export class User {
     length: 11,
     nullable: true,
   })
-  mainPhone?: string;
+  mainPhone: string;
 
   @Column({
     length: 11,
     nullable: true,
   })
-  secondaryPhone?: string;
+  secondaryPhone: string;
 
   @Column({ default: false })
   isRegisteredWithGoogle: boolean;
@@ -80,6 +82,13 @@ export class User {
   @OneToOne(() => Profile, { cascade: true })
   @JoinColumn()
   profile: Profile;
+
+  @Field(() => [Restaurant], { nullable: true })
+  @OneToMany(() => Restaurant, (restaurant: Restaurant) => restaurant.user, {
+    cascade: true,
+  })
+  @JoinColumn()
+  restaurant: Restaurant[];
 
   @DeleteDateColumn()
   deletedAt: Date;

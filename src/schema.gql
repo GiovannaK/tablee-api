@@ -17,15 +17,69 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Restaurant {
+  id: ID!
+  role: RestaurantCategory!
+  user: User
+  name: String!
+  cnpj: String!
+  email: String!
+  mainPhone: String!
+  secondaryPhone: String
+  isWifi: Boolean!
+  isParking: Boolean!
+  isOpen: Boolean!
+  start_hour: String!
+  end_hour: String!
+  weekend_start_hour: String!
+  weekend_end_hour: String!
+  capacity: Float!
+  stripeAccountId: String!
+  deletedAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum RestaurantCategory {
+  BRASILEIRO
+  BISTRO
+  BUFFET
+  CAFETERIA
+  CANTINA
+  CLASSICO
+  COMFORT
+  AUTORAL
+  FASTFOOD
+  GRILL
+  JAPONESA
+  HAMBURGUERIA
+  PIZZARIA
+  JANTARFINO
+  POPULAR
+  POPUP
+  PUB
+  REDESDERESTAURANTE
+  MEXICANO
+  ITALIANO
+  CHINES
+  ESPANHOL
+  PORTUGUES
+  INGLES
+  ARGENTINO
+  FRUTOSDOMAR
+  STEAKHOUSE
+}
+
 type User {
   id: ID!
   role: UserRole!
   profile: Profile
+  restaurant: [Restaurant!]
   firstName: String!
   lastName: String!
   email: String!
-  mainPhone: String
-  secondaryPhone: String
+  mainPhone: String!
+  secondaryPhone: String!
   isRegisteredWithGoogle: Boolean!
   loginToken: String
   expirationLoginToken: String
