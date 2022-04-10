@@ -1,10 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { RestaurantImage } from '../../images/entities/restaurantImage.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -55,7 +57,7 @@ export class Restaurant {
     default: RestaurantCategory.BRASILEIRO,
   })
   @Field(() => RestaurantCategory)
-  role: RestaurantCategory;
+  category: RestaurantCategory;
 
   @Column({ default: false })
   isWifi: boolean;
@@ -82,15 +84,25 @@ export class Restaurant {
   capacity: number;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
-  stripeAccountId: string;
+  stripeAccountId?: string;
 
   @Field(() => User, { nullable: true })
   @ManyToOne(() => User, (user: User) => user.restaurant, {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @Field(() => [RestaurantImage], { nullable: true })
+  @OneToMany(
+    () => RestaurantImage,
+    (restaurantImage: RestaurantImage) => restaurantImage.restaurant,
+    {
+      cascade: true,
+    },
+  )
+  restaurantImage: RestaurantImage[];
 
   @DeleteDateColumn()
   deletedAt: Date;

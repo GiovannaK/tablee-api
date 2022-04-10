@@ -17,10 +17,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type RestaurantImage {
+  id: ID!
+  restaurant: Restaurant
+  url: String!
+  key: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Restaurant {
   id: ID!
-  role: RestaurantCategory!
+  category: RestaurantCategory!
   user: User
+  restaurantImage: [RestaurantImage!]
   name: String!
   cnpj: String!
   email: String!
@@ -34,7 +44,7 @@ type Restaurant {
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
-  stripeAccountId: String!
+  stripeAccountId: String
   deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -111,6 +121,7 @@ type Mutation {
   signin(data: SigninInput!): User!
   signinWithGoogle(data: GoogleAuthInput!): AuthType!
   createOwner(data: CreateOwnerInput!): User!
+  createRestaurant(data: CreateRestaurantInput!): Restaurant!
 }
 
 input CreateUserInput {
@@ -139,4 +150,21 @@ input CreateOwnerInput {
   email: String!
   mainPhone: String
   secondaryPhone: String
+}
+
+input CreateRestaurantInput {
+  name: String!
+  email: String!
+  cnpj: String!
+  mainPhone: String!
+  secondaryPhone: String
+  category: RestaurantCategory!
+  isWifi: Boolean!
+  isParking: Boolean!
+  isOpen: Boolean!
+  start_hour: String!
+  end_hour: String!
+  weekend_start_hour: String!
+  weekend_end_hour: String!
+  capacity: Float!
 }

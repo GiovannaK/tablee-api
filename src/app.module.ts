@@ -16,6 +16,7 @@ import { GoogleauthModule } from './googleauth/googleauth.module';
 import { StripeModule } from './stripe/stripe.module';
 import { OwnerModule } from './owner/owner.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
+import { ImagesModule } from './images/images.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -50,6 +51,7 @@ import * as Joi from '@hapi/joi';
     StripeModule,
     OwnerModule,
     RestaurantModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

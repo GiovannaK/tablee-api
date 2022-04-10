@@ -30,4 +30,23 @@ export class FileService {
       })
       .promise();
   }
+
+  async uploadFiles(files: Array<Express.Multer.File>) {
+    const s3 = new S3();
+
+    const responses = await Promise.all(
+      files.map(async (file) => {
+        const uploadedFile = await s3
+          .upload({
+            ACL: 'public-read',
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Body: file.buffer,
+            Key: `${uuid()}-${file.originalname}`,
+          })
+          .promise();
+        return uploadedFile;
+      }),
+    );
+    return responses;
+  }
 }
