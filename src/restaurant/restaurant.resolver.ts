@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/role.guard';
 import { Roles } from '../auth/userRoles.decorator';
@@ -25,6 +25,12 @@ export class RestaurantResolver {
       data,
       currentUser,
     );
+    return restaurant;
+  }
+
+  @Query(() => Restaurant)
+  async getRestaurantById(@Args('id') id: string) {
+    const restaurant = await this.restaurantService.getRestaurantById(id);
     return restaurant;
   }
 }

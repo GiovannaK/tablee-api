@@ -113,6 +113,7 @@ type AuthType {
 
 type Query {
   getCurrentUser: User!
+  getRestaurantById(id: String!): Restaurant!
 }
 
 type Mutation {

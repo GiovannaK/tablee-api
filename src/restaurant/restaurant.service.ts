@@ -32,4 +32,16 @@ export class RestaurantService {
 
     return createdRestaurant;
   }
+
+  async getRestaurantById(id: string) {
+    const restaurant = await this.restaurantRepository.findOne(id, {
+      relations: ['user', 'restaurantImage'],
+    });
+
+    if (!restaurant) {
+      throw new InternalServerErrorException('Cannot find restaurant');
+    }
+
+    return restaurant;
+  }
 }

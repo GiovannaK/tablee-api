@@ -54,4 +54,20 @@ export class ImagesService {
 
     return getImages;
   }
+
+  async deleteRestaurantImage(key: string, id: string) {
+    await this.fileService.deleteUploadedFile(key);
+    const deleteImageRestaurant = await this.restaurantImageRepository.update(
+      id,
+      {
+        url: null,
+        key: null,
+      },
+    );
+
+    if (!deleteImageRestaurant) {
+      throw new InternalServerErrorException('Cannot delete image');
+    }
+    return;
+  }
 }
