@@ -100,6 +100,8 @@ export class Restaurant {
     (restaurantImage: RestaurantImage) => restaurantImage.restaurant,
     {
       cascade: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
   )
   restaurantImage: RestaurantImage[];
