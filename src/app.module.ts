@@ -17,6 +17,8 @@ import { StripeModule } from './stripe/stripe.module';
 import { OwnerModule } from './owner/owner.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { ImagesModule } from './images/images.module';
+import { ManagerModule } from './manager/manager.module';
+import { PermissionModule } from './permission/permission.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -52,6 +54,8 @@ import * as Joi from '@hapi/joi';
     OwnerModule,
     RestaurantModule,
     ImagesModule,
+    ManagerModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

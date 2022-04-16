@@ -29,7 +29,7 @@ type RestaurantImage {
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
-  user: User
+  user: [User!]
   restaurantImage: [RestaurantImage!]
   name: String!
   cnpj: String!
@@ -123,6 +123,7 @@ type Mutation {
   signinWithGoogle(data: GoogleAuthInput!): AuthType!
   createOwner(data: CreateOwnerInput!): User!
   createRestaurant(data: CreateRestaurantInput!): Restaurant!
+  createManager(data: CreateManagerInput!): User!
 }
 
 input CreateUserInput {
@@ -168,4 +169,13 @@ input CreateRestaurantInput {
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
+}
+
+input CreateManagerInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  mainPhone: String
+  secondaryPhone: String
+  restaurantId: String!
 }

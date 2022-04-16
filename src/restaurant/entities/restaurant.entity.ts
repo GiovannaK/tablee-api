@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -88,11 +90,11 @@ export class Restaurant {
   })
   stripeAccountId?: string;
 
-  @Field(() => User, { nullable: true })
-  @ManyToOne(() => User, (user: User) => user.restaurant, {
+  @Field(() => [User], { nullable: true })
+  @ManyToMany(() => User, (user: User) => user.restaurant, {
     onDelete: 'CASCADE',
   })
-  user: User;
+  user: User[];
 
   @Field(() => [RestaurantImage], { nullable: true })
   @OneToMany(

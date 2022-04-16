@@ -20,17 +20,17 @@ export class RestaurantService {
   ) {
     const restaurant = this.restaurantRepository.create({
       ...restaurantInput,
-      user: currentUser,
+      user: [currentUser],
     });
     const createdRestaurant = await this.restaurantRepository.save(restaurant);
-
     if (!createdRestaurant) {
       throw new InternalServerErrorException('Cannot create restaurant');
     }
-
     await this.stripeService.createRestaurantStripe(createdRestaurant);
-
-    return createdRestaurant;
+    const getRestaurantWithRelations = await this.getRestaurantById(
+      createdRestaurant.id,
+    );
+    return getRestaurantWithRelations;
   }
 
   async getRestaurantById(id: string) {

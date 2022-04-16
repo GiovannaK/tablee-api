@@ -14,5 +14,6 @@ import { RestaurantImage } from '../images/entities/restaurantImage.entity';
     StripeModule,
   ],
   providers: [RestaurantService, RestaurantResolver],
+  exports: [RestaurantService],
 })
 export class RestaurantModule {}

@@ -6,6 +6,8 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -84,10 +86,10 @@ export class User {
   profile: Profile;
 
   @Field(() => [Restaurant], { nullable: true })
-  @OneToMany(() => Restaurant, (restaurant: Restaurant) => restaurant.user, {
+  @ManyToMany(() => Restaurant, (restaurant: Restaurant) => restaurant.user, {
     cascade: true,
   })
-  @JoinColumn()
+  @JoinTable()
   restaurant: Restaurant[];
 
   @DeleteDateColumn()
