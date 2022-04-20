@@ -20,7 +20,7 @@ export class RestaurantResolver {
   async createRestaurant(
     @Args('data') data: CreateRestaurantInput,
     @CurrentUser() currentUser: User,
-  ): Promise<Restaurant> {
+  ) {
     const restaurant = await this.restaurantService.createRestaurant(
       data,
       currentUser,

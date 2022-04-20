@@ -88,6 +88,8 @@ export class User {
   @Field(() => [Restaurant], { nullable: true })
   @ManyToMany(() => Restaurant, (restaurant: Restaurant) => restaurant.user, {
     cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinTable()
   restaurant: Restaurant[];

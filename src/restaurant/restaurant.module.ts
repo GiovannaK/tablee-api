@@ -6,10 +6,11 @@ import { Restaurant } from './entities/restaurant.entity';
 import { UserModule } from '../user/user.module';
 import { StripeModule } from '../stripe/stripe.module';
 import { RestaurantImage } from '../images/entities/restaurantImage.entity';
+import { User } from '../user/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Restaurant, RestaurantImage]),
+    TypeOrmModule.forFeature([Restaurant, RestaurantImage, User]),
     UserModule,
     StripeModule,
   ],

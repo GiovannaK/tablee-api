@@ -9,26 +9,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class RestaurantService {
   constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @InjectRepository(Restaurant)
     private readonly restaurantRepository: Repository<Restaurant>,
     private readonly stripeService: StripeService,
   ) {}
 
-  async createRestaurant(
-    restaurantInput: CreateRestaurantInput,
-    currentUser: User,
-  ) {
-    const restaurant = this.restaurantRepository.create({
+  async createRestaurant(restaurantInput: CreateRestaurantInput, user: User) {
+    const restaurant = await this.restaurantRepository.create({
       ...restaurantInput,
-      user: [currentUser],
     });
-    const createdRestaurant = await this.restaurantRepository.save(restaurant);
-    if (!createdRestaurant) {
+    const savedRestaurant = await this.restaurantRepository.save(restaurant);
+    if (!savedRestaurant) {
       throw new InternalServerErrorException('Cannot create restaurant');
     }
-    await this.stripeService.createRestaurantStripe(createdRestaurant);
+    const addUserToRestaurant = {
+      ...restaurant,
+      user: [user],
+    };
+    const addRestaurantAndUser = await this.restaurantRepository.save(
+      addUserToRestaurant,
+    );
+    if (!addRestaurantAndUser) {
+      throw new InternalServerErrorException('Cannot add owner to restaurant');
+    }
+    await this.stripeService.createRestaurantStripe(restaurant);
     const getRestaurantWithRelations = await this.getRestaurantById(
-      createdRestaurant.id,
+      restaurant.id,
     );
     return getRestaurantWithRelations;
   }
