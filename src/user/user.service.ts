@@ -92,4 +92,18 @@ export class UserService {
     }
     return user;
   }
+
+  async getUserRestaurants(userId: string) {
+    const userRestaurants = await this.userRepository.findOne(userId, {
+      relations: ['restaurant'],
+    });
+
+    if (!userRestaurants) {
+      throw new InternalServerErrorException(
+        'Cannot find user with restaurants',
+      );
+    }
+
+    return userRestaurants;
+  }
 }

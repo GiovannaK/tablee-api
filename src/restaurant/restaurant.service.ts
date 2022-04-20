@@ -52,4 +52,14 @@ export class RestaurantService {
 
     return restaurant;
   }
+
+  async getRestaurantByIdNoRelations(id: string) {
+    const restaurant = await this.restaurantRepository.findOne(id);
+
+    if (!restaurant) {
+      throw new InternalServerErrorException('Cannot find restaurant');
+    }
+
+    return restaurant;
+  }
 }
