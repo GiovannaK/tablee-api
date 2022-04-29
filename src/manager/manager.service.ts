@@ -31,11 +31,11 @@ export class ManagerService {
     if (!getRestaurant) {
       throw new InternalServerErrorException('Cannot find restaurant');
     }
-    // await this.permissionService.hasRequiredPermissionForRestaurant(
-    //   currentUser.id,
-    //   id,
-    //   UserRole.OWNER,
-    // );
+    await this.permissionService.hasRequiredPermissionForRestaurant(
+      currentUser.id,
+      id,
+      UserRole.OWNER,
+    );
 
     const manager = await this.userRepository.create({
       ...createManagerInput,
