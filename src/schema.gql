@@ -106,6 +106,16 @@ enum UserRole {
   MANAGER
 }
 
+type StripeCreateAccountLink {
+  object: String!
+  url: String!
+}
+
+type StripeCreateLoginLink {
+  object: String!
+  url: String!
+}
+
 type AuthType {
   user: User!
   loginToken: String!
@@ -113,6 +123,8 @@ type AuthType {
 
 type Query {
   getCurrentUser: User!
+  createAccountLink(id: String!): StripeCreateAccountLink!
+  createLoginLink(id: String!): StripeCreateLoginLink!
   getRestaurantById(id: String!): Restaurant!
 }
 
