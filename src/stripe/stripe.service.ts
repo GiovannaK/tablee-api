@@ -91,9 +91,15 @@ export class StripeService {
     };
   }
 
-  async createLoginLink(request: Request | any) {
+  async createLoginLink(user: User, restaurantId: string) {
+    const getRestaurant = await this.getRestaurantById(restaurantId);
+    await this.permissionService.hasRequiredPermissionForRestaurant(
+      user.id,
+      restaurantId,
+      UserRole.OWNER,
+    );
     const loginLink = await this.stripe.accounts.createLoginLink(
-      request.user.stripeAccountId,
+      getRestaurant.stripeAccountId,
     );
 
     if (!loginLink) {

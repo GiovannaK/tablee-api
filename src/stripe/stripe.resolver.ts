@@ -8,7 +8,7 @@ import { Roles } from '../auth/userRoles.decorator';
 import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
-import { StripeCreateAccountLinkInput } from './dto/StripeCreateAccountLink.input';
+import { StripeCreateLoginLink } from './dto/StripeCreateLoginLink';
 
 @Resolver()
 export class StripeResolver {
@@ -26,5 +26,16 @@ export class StripeResolver {
       id,
     );
     return accountLink;
+  }
+
+  @Roles(UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => StripeCreateLoginLink)
+  async createLoginLink(
+    @Args('id') id: string,
+    @CurrentUser() currentUser: User,
+  ): Promise<StripeCreateLoginLink> {
+    const loginLink = await this.stripeService.createLoginLink(currentUser, id);
+    return loginLink;
   }
 }
