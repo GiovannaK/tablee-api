@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EmployeeService } from './employee.service';
 import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -26,5 +26,14 @@ export class EmployeeResolver {
       data.restaurantId,
     );
     return employee;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [User])
+  async listEmployeesByRestaurant(@Args('restaurantId') restaurantId: string) {
+    const employees = await this.employeeService.listEmployeesByRestaurant(
+      restaurantId,
+    );
+    return employees;
   }
 }

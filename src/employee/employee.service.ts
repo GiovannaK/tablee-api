@@ -68,4 +68,22 @@ export class EmployeeService {
 
     return getUserWithRestaurant;
   }
+
+  async listEmployeesByRestaurant(restaurantId: string) {
+    const requiredRole = UserRole.EMPLOYEE;
+    const getEmployees = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('user.role = :requiredRole', { requiredRole })
+      .getMany();
+
+    if (!getEmployees) {
+      throw new InternalServerErrorException(
+        'Cannot find employees for this restaurant',
+      );
+    }
+
+    return getEmployees;
+  }
 }

@@ -68,4 +68,22 @@ export class ManagerService {
 
     return getUserWithRestaurant;
   }
+
+  async listManagerByRestaurant(restaurantId: string) {
+    const requiredRole = UserRole.MANAGER;
+    const getManagers = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('user.role = :requiredRole', { requiredRole })
+      .getMany();
+
+    if (!getManagers) {
+      throw new InternalServerErrorException(
+        'Cannot find managers for this restaurant',
+      );
+    }
+
+    return getManagers;
+  }
 }

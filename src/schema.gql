@@ -126,6 +126,8 @@ type Query {
   createAccountLink(id: String!): StripeCreateAccountLink!
   createLoginLink(id: String!): StripeCreateLoginLink!
   getRestaurantById(id: String!): Restaurant!
+  listManagersByRestaurant(restaurantId: String!): [User!]!
+  listEmployeesByRestaurant(restaurantId: String!): [User!]!
 }
 
 type Mutation {
