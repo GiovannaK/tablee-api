@@ -6,10 +6,10 @@ import { RestaurantService } from '../restaurant/restaurant.service';
 import { UserRole } from '../user/entities/role/userRole';
 import { PermissionService } from '../permission/permission.service';
 import { UserService } from 'src/user/user.service';
-import { CreateManagerInput } from './dto/create-manager.input';
+import { CreateEmployeeInput } from './dto/create-employee.input';
 
 @Injectable()
-export class ManagerService {
+export class EmployeeService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -18,8 +18,8 @@ export class ManagerService {
     private readonly userService: UserService,
   ) {}
 
-  async createManager(
-    createManagerInput: CreateManagerInput,
+  async createEmployee(
+    createManagerInput: CreateEmployeeInput,
     currentUser: User,
     id: string,
   ) {
@@ -28,15 +28,15 @@ export class ManagerService {
     if (!getRestaurant) {
       throw new InternalServerErrorException('Cannot find restaurant');
     }
-    await this.permissionService.hasRequiredPermissionForRestaurant(
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
       currentUser.id,
       id,
-      UserRole.OWNER,
+      [UserRole.OWNER, UserRole.MANAGER],
     );
 
     const manager = await this.userRepository.create({
       ...createManagerInput,
-      role: UserRole.MANAGER,
+      role: UserRole.EMPLOYEE,
     });
 
     const savedUser = await this.userRepository.save(manager);

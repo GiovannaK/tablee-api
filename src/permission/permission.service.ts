@@ -1,6 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Restaurant } from '../restaurant/entities/restaurant.entity';
 import { Repository } from 'typeorm';
 import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
@@ -8,8 +7,6 @@ import { User } from '../user/entities/user.entity';
 @Injectable()
 export class PermissionService {
   constructor(
-    @InjectRepository(Restaurant)
-    private readonly restaurantRepository: Repository<Restaurant>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -34,5 +31,27 @@ export class PermissionService {
     }
 
     return hasPermission;
+  }
+
+  async hasMultiplePermissionRequiredForRestaurant(
+    currentUserId: string,
+    restaurantId: string,
+    requiredRole: UserRole[],
+  ) {
+    const hasMultiplePermission = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('user.id = :currentUserId', { currentUserId })
+      .andWhere('user.role IN (:...requiredRole)', { requiredRole })
+      .getMany();
+
+    if (!hasMultiplePermission) {
+      throw new InternalServerErrorException(
+        'You do not have permission to execute this action',
+      );
+    }
+
+    return hasMultiplePermission;
   }
 }

@@ -136,6 +136,7 @@ type Mutation {
   createOwner(data: CreateOwnerInput!): User!
   createRestaurant(data: CreateRestaurantInput!): Restaurant!
   createManager(data: CreateManagerInput!): User!
+  createEmployee(data: CreateEmployeeInput!): User!
 }
 
 input CreateUserInput {
@@ -184,6 +185,15 @@ input CreateRestaurantInput {
 }
 
 input CreateManagerInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  mainPhone: String
+  secondaryPhone: String
+  restaurantId: String!
+}
+
+input CreateEmployeeInput {
   firstName: String!
   lastName: String!
   email: String!
