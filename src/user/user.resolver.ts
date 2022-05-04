@@ -6,6 +6,7 @@ import { CreateUserInput } from './dto/create-user.Input';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { CurrentUser } from './decorators/currentUser.decorator';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Resolver('User')
 export class UserResolver {
@@ -14,6 +15,16 @@ export class UserResolver {
   @Mutation(() => User)
   async createUser(@Args('data') data: CreateUserInput): Promise<User> {
     const user = await this.userService.createUser(data);
+    return user;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => User)
+  async updateUser(
+    @Args('data') data: UpdateUserInput,
+    @CurrentUser() currentUser: User,
+  ) {
+    const user = await this.userService.updateUser(currentUser, data);
     return user;
   }
 

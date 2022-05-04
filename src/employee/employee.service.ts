@@ -7,6 +7,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { PermissionService } from '../permission/permission.service';
 import { UserService } from 'src/user/user.service';
 import { CreateEmployeeInput } from './dto/create-employee.input';
+import { UpdateEmployeeInput } from './dto/update-employee.input';
 
 @Injectable()
 export class EmployeeService {
@@ -85,5 +86,38 @@ export class EmployeeService {
     }
 
     return getEmployees;
+  }
+
+  async updateEmployee(
+    currentUser: User,
+    updateEmployeeInput: UpdateEmployeeInput,
+    restaurantId: string,
+    employeeId: string,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER],
+    );
+
+    delete updateEmployeeInput.restaurantId;
+    delete updateEmployeeInput.id;
+
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .update('User')
+      .set({
+        ...updateEmployeeInput,
+      })
+      .where('id = :employeeId', { employeeId })
+      .updateEntity(true)
+      .execute();
+
+    if (!user) {
+      throw new InternalServerErrorException('Cannot update employee');
+    }
+    const getUpdatedUser = await this.userService.getUserById(employeeId);
+
+    return getUpdatedUser;
   }
 }

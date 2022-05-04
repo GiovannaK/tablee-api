@@ -8,6 +8,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
 import { CreateManagerInput } from './dto/create-manager.input';
 import { ManagerService } from './manager.service';
+import { UpdateManagerInput } from './dto/update-manager.input';
 
 @Resolver()
 export class ManagerResolver {
@@ -35,5 +36,21 @@ export class ManagerResolver {
       restaurantId,
     );
     return managers;
+  }
+
+  @Roles(UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => User)
+  async updateManager(
+    @Args('data') data: UpdateManagerInput,
+    @CurrentUser() currentUser: User,
+  ) {
+    const user = await this.managerService.updateManager(
+      currentUser,
+      data,
+      data.restaurantId,
+      data.id,
+    );
+    return user;
   }
 }

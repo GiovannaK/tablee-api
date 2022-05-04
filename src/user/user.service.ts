@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.Input';
 import { StripeService } from '../stripe/stripe.service';
+import { UpdateUserInput } from './dto/update-user.input';
 const crypto = require('crypto');
 
 @Injectable()
@@ -105,5 +106,23 @@ export class UserService {
     }
 
     return userRestaurants;
+  }
+
+  async updateUser(currentUser: User, updateUserInput: UpdateUserInput) {
+    const userId = currentUser.id;
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .update('User')
+      .set({ ...updateUserInput })
+      .where('id = :userId', { userId })
+      .updateEntity(true)
+      .execute();
+
+    if (!user) {
+      throw new InternalServerErrorException('Cannot update user');
+    }
+    const getUpdatedUser = await this.getUserById(userId);
+
+    return getUpdatedUser;
   }
 }

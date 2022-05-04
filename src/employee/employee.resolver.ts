@@ -8,6 +8,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
 import { CreateEmployeeInput } from './dto/create-employee.input';
 import { UseGuards } from '@nestjs/common';
+import { UpdateEmployeeInput } from './dto/update-employee.input';
 
 @Resolver()
 export class EmployeeResolver {
@@ -35,5 +36,21 @@ export class EmployeeResolver {
       restaurantId,
     );
     return employees;
+  }
+
+  @Roles(UserRole.OWNER, UserRole.EMPLOYEE)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => User)
+  async updateEmployee(
+    @Args('data') data: UpdateEmployeeInput,
+    @CurrentUser() currentUser: User,
+  ) {
+    const employee = await this.employeeService.updateEmployee(
+      currentUser,
+      data,
+      data.restaurantId,
+      data.id,
+    );
+    return employee;
   }
 }

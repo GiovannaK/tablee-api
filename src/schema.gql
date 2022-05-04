@@ -132,13 +132,16 @@ type Query {
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
   validateUser(data: ValidateUserInput!): AuthType!
   signin(data: SigninInput!): User!
   signinWithGoogle(data: GoogleAuthInput!): AuthType!
   createOwner(data: CreateOwnerInput!): User!
   createRestaurant(data: CreateRestaurantInput!): Restaurant!
   createManager(data: CreateManagerInput!): User!
+  updateManager(data: UpdateManagerInput!): User!
   createEmployee(data: CreateEmployeeInput!): User!
+  updateEmployee(data: UpdateEmployeeInput!): User!
 }
 
 input CreateUserInput {
@@ -146,6 +149,14 @@ input CreateUserInput {
   lastName: String!
   email: String!
   mainPhone: String!
+  secondaryPhone: String
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  mainPhone: String
   secondaryPhone: String
 }
 
@@ -195,10 +206,30 @@ input CreateManagerInput {
   restaurantId: String!
 }
 
+input UpdateManagerInput {
+  id: String!
+  firstName: String
+  lastName: String
+  email: String
+  mainPhone: String
+  secondaryPhone: String
+  restaurantId: String!
+}
+
 input CreateEmployeeInput {
   firstName: String!
   lastName: String!
   email: String!
+  mainPhone: String
+  secondaryPhone: String
+  restaurantId: String!
+}
+
+input UpdateEmployeeInput {
+  id: String!
+  firstName: String
+  lastName: String
+  email: String
   mainPhone: String
   secondaryPhone: String
   restaurantId: String!

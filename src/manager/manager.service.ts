@@ -7,6 +7,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { PermissionService } from '../permission/permission.service';
 import { UserService } from 'src/user/user.service';
 import { CreateManagerInput } from './dto/create-manager.input';
+import { UpdateManagerInput } from './dto/update-manager.input';
 
 @Injectable()
 export class ManagerService {
@@ -85,5 +86,38 @@ export class ManagerService {
     }
 
     return getManagers;
+  }
+
+  async updateManager(
+    currentUser: User,
+    updateManagerInput: UpdateManagerInput,
+    restaurantId: string,
+    managerId: string,
+  ) {
+    await this.permissionService.hasRequiredPermissionForRestaurant(
+      currentUser.id,
+      restaurantId,
+      UserRole.OWNER,
+    );
+
+    delete updateManagerInput.restaurantId;
+    delete updateManagerInput.id;
+
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .update('User')
+      .set({
+        ...updateManagerInput,
+      })
+      .where('id = :managerId', { managerId })
+      .updateEntity(true)
+      .execute();
+
+    if (!user) {
+      throw new InternalServerErrorException('Cannot update manager');
+    }
+    const getUpdatedUser = await this.userService.getUserById(managerId);
+
+    return getUpdatedUser;
   }
 }
