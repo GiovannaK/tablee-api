@@ -5,6 +5,9 @@ import { Repository } from 'typeorm';
 import { CreateRestaurantInput } from './dto/create-restaurant.input';
 import { Restaurant } from './entities/restaurant.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PermissionService } from '../permission/permission.service';
+import { UpdateRestaurantInput } from '../restaurant/dto/update-restaurant.input';
+import { UserRole } from '../user/entities/role/userRole';
 
 @Injectable()
 export class RestaurantService {
@@ -14,6 +17,7 @@ export class RestaurantService {
     @InjectRepository(Restaurant)
     private readonly restaurantRepository: Repository<Restaurant>,
     private readonly stripeService: StripeService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   async createRestaurant(restaurantInput: CreateRestaurantInput, user: User) {
@@ -61,5 +65,34 @@ export class RestaurantService {
     }
 
     return restaurant;
+  }
+
+  async updateRestaurant(
+    currentUser: User,
+    updateRestaurantInput: UpdateRestaurantInput,
+    restaurantId: string,
+  ) {
+    await this.permissionService.hasRequiredPermissionForRestaurant(
+      currentUser.id,
+      restaurantId,
+      UserRole.OWNER,
+    );
+
+    const restaurant = await this.restaurantRepository
+      .createQueryBuilder()
+      .update('Restaurant')
+      .set({
+        ...updateRestaurantInput,
+      })
+      .where('id = :restaurantId', { restaurantId })
+      .updateEntity(true)
+      .execute();
+
+    if (!restaurant) {
+      throw new InternalServerErrorException('Cannot update restaurant');
+    }
+    const getUpdatedRestaurant = await this.getRestaurantById(restaurantId);
+
+    return getUpdatedRestaurant;
   }
 }

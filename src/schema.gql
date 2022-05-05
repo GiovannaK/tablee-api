@@ -138,6 +138,7 @@ type Mutation {
   signinWithGoogle(data: GoogleAuthInput!): AuthType!
   createOwner(data: CreateOwnerInput!): User!
   createRestaurant(data: CreateRestaurantInput!): Restaurant!
+  updateRestaurant(data: UpdateRestaurantInput!, restaurantId: String!): Restaurant!
   createManager(data: CreateManagerInput!): User!
   updateManager(data: UpdateManagerInput!): User!
   deleteManager(managerId: String!, restaurantId: String!): Boolean!
@@ -197,6 +198,23 @@ input CreateRestaurantInput {
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
+}
+
+input UpdateRestaurantInput {
+  name: String
+  email: String
+  cnpj: String
+  mainPhone: String
+  secondaryPhone: String
+  category: RestaurantCategory
+  isWifi: Boolean
+  isParking: Boolean
+  isOpen: Boolean
+  start_hour: String
+  end_hour: String
+  weekend_start_hour: String
+  weekend_end_hour: String
+  capacity: Float
 }
 
 input CreateManagerInput {

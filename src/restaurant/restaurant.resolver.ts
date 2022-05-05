@@ -7,6 +7,7 @@ import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
 import { CreateRestaurantInput } from './dto/create-restaurant.input';
+import { UpdateRestaurantInput } from './dto/update-restaurant.input';
 import { Restaurant } from './entities/restaurant.entity';
 import { RestaurantService } from './restaurant.service';
 
@@ -31,6 +32,22 @@ export class RestaurantResolver {
   @Query(() => Restaurant)
   async getRestaurantById(@Args('id') id: string) {
     const restaurant = await this.restaurantService.getRestaurantById(id);
+    return restaurant;
+  }
+
+  @Roles(UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => Restaurant)
+  async updateRestaurant(
+    @Args('data') data: UpdateRestaurantInput,
+    @Args('restaurantId') restaurantId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const restaurant = await this.restaurantService.updateRestaurant(
+      currentUser,
+      data,
+      restaurantId,
+    );
     return restaurant;
   }
 }
