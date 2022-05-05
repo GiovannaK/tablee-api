@@ -120,4 +120,26 @@ export class EmployeeService {
 
     return getUpdatedUser;
   }
+
+  async deleteEmployee(
+    employeeId: string,
+    restaurantId: string,
+    currentUser: User,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER],
+    );
+
+    const deleteEmployee = await this.userRepository.softDelete({
+      id: employeeId,
+    });
+
+    if (!deleteEmployee.affected) {
+      throw new InternalServerErrorException('Cannot delete employee');
+    }
+
+    return true;
+  }
 }

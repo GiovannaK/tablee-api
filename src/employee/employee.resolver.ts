@@ -40,6 +40,22 @@ export class EmployeeResolver {
 
   @Roles(UserRole.OWNER, UserRole.EMPLOYEE)
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => Boolean)
+  async deleteEmployee(
+    @Args('restaurantId') restaurantId: string,
+    @Args('employeeId') employeeId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const employee = await this.employeeService.deleteEmployee(
+      employeeId,
+      restaurantId,
+      currentUser,
+    );
+    return employee;
+  }
+
+  @Roles(UserRole.OWNER, UserRole.EMPLOYEE)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Mutation(() => User)
   async updateEmployee(
     @Args('data') data: UpdateEmployeeInput,

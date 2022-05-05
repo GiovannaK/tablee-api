@@ -120,4 +120,26 @@ export class ManagerService {
 
     return getUpdatedUser;
   }
+
+  async deleteManager(
+    managerId: string,
+    restaurantId: string,
+    currentUser: User,
+  ) {
+    await this.permissionService.hasRequiredPermissionForRestaurant(
+      currentUser.id,
+      restaurantId,
+      UserRole.OWNER,
+    );
+
+    const deleteManager = await this.userRepository.softDelete({
+      id: managerId,
+    });
+
+    if (!deleteManager.affected) {
+      throw new InternalServerErrorException('Cannot delete manager');
+    }
+
+    return true;
+  }
 }

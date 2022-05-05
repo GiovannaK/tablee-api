@@ -140,7 +140,9 @@ type Mutation {
   createRestaurant(data: CreateRestaurantInput!): Restaurant!
   createManager(data: CreateManagerInput!): User!
   updateManager(data: UpdateManagerInput!): User!
+  deleteManager(managerId: String!, restaurantId: String!): Boolean!
   createEmployee(data: CreateEmployeeInput!): User!
+  deleteEmployee(restaurantId: String!, employeeId: String!): Boolean!
   updateEmployee(data: UpdateEmployeeInput!): User!
 }
 

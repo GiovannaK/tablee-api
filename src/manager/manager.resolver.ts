@@ -53,4 +53,20 @@ export class ManagerResolver {
     );
     return user;
   }
+
+  @Roles(UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => Boolean)
+  async deleteManager(
+    @Args('managerId') managerId: string,
+    @Args('restaurantId') restaurantId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const manager = await this.managerService.deleteManager(
+      managerId,
+      restaurantId,
+      currentUser,
+    );
+    return manager;
+  }
 }
