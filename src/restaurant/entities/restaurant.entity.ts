@@ -5,15 +5,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
+  JoinColumn,
   ManyToMany,
-  ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { RestaurantCategory } from './enums/category.enum';
+import { Address } from '../../address/entities/address.entity';
 
 @ObjectType()
 @Entity()
@@ -107,6 +108,11 @@ export class Restaurant {
     },
   )
   restaurantImage: RestaurantImage[];
+
+  @Field(() => Address, { nullable: true })
+  @OneToOne(() => Address, { cascade: true })
+  @JoinColumn()
+  address: Address;
 
   @DeleteDateColumn()
   deletedAt: Date;

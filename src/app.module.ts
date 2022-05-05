@@ -20,6 +20,7 @@ import { ImagesModule } from './images/images.module';
 import { ManagerModule } from './manager/manager.module';
 import { PermissionModule } from './permission/permission.module';
 import { EmployeeModule } from './employee/employee.module';
+import { AddressModule } from './address/address.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -58,6 +59,7 @@ import * as Joi from '@hapi/joi';
     ManagerModule,
     PermissionModule,
     EmployeeModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
