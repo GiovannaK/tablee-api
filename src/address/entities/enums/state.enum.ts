@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export enum BrazilianStates {
   AC = 'Acre',
   AL = 'Alagoas',
@@ -27,3 +29,5 @@ export enum BrazilianStates {
   SE = 'Sergipe',
   TO = 'Tocantins',
 }
+
+registerEnumType(BrazilianStates, { name: 'BrazilianStates' });

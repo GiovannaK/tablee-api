@@ -49,9 +49,15 @@ export class Address {
   street: string;
 
   @Column({
+    nullable: false,
+    type: 'integer',
+  })
+  number: number;
+
+  @Column({
     type: 'enum',
     enum: BrazilianStates,
-    default: null,
+    default: BrazilianStates.SP,
   })
   @Field(() => BrazilianStates)
   state: BrazilianStates;

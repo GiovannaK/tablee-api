@@ -26,11 +26,57 @@ type RestaurantImage {
   updatedAt: DateTime!
 }
 
+type Address {
+  id: ID!
+  state: BrazilianStates!
+  restaurant: Restaurant
+  city: String!
+  uf: String!
+  postalCode: String!
+  neighborhood: String!
+  street: String!
+  number: Float!
+  deletedAt: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum BrazilianStates {
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
+}
+
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
   user: [User!]
   restaurantImage: [RestaurantImage!]
+  address: Address
   name: String!
   cnpj: String!
   email: String!
@@ -97,6 +143,7 @@ type User {
   deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
+  lastAccess: DateTime!
 }
 
 enum UserRole {
@@ -119,6 +166,17 @@ type StripeCreateLoginLink {
 type AuthType {
   user: User!
   loginToken: String!
+}
+
+type AddressWithRestaurant {
+  restaurantId: String!
+  restaurant: Restaurant!
+  city: String!
+  uf: String!
+  postalCode: String!
+  neighborhood: String!
+  street: String!
+  number: Float!
 }
 
 type Query {
@@ -145,6 +203,8 @@ type Mutation {
   createEmployee(data: CreateEmployeeInput!): User!
   deleteEmployee(restaurantId: String!, employeeId: String!): Boolean!
   updateEmployee(data: UpdateEmployeeInput!): User!
+  createAddress(data: CreateAddressInput!): AddressWithRestaurant!
+  updateAddress(data: UpdateAddressInput!): Address!
 }
 
 input CreateUserInput {
@@ -253,4 +313,25 @@ input UpdateEmployeeInput {
   mainPhone: String
   secondaryPhone: String
   restaurantId: String!
+}
+
+input CreateAddressInput {
+  restaurantId: String!
+  city: String!
+  uf: String!
+  postalCode: String!
+  neighborhood: String!
+  street: String!
+  number: Float!
+}
+
+input UpdateAddressInput {
+  restaurantId: String!
+  id: String!
+  city: String
+  uf: String
+  postalCode: String
+  neighborhood: String
+  street: String
+  number: Float
 }
