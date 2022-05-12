@@ -7,7 +7,6 @@ type Profile {
   user: User
   avatarUrl: String
   avatarUrlKey: String
-  deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -36,7 +35,6 @@ type Address {
   neighborhood: String!
   street: String!
   number: Float!
-  deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -91,7 +89,6 @@ type Restaurant {
   weekend_end_hour: String!
   capacity: Float!
   stripeAccountId: String
-  deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -140,7 +137,6 @@ type User {
   loginToken: String
   expirationLoginToken: String
   stripeCustomerId: String
-  deletedAt: DateTime!
   createdAt: DateTime!
   updatedAt: DateTime!
   lastAccess: DateTime!
@@ -168,6 +164,11 @@ type AuthType {
   loginToken: String!
 }
 
+type UsersRestaurant {
+  users: [User!]!
+  count: Float!
+}
+
 type AddressWithRestaurant {
   restaurantId: String!
   restaurant: Restaurant!
@@ -184,6 +185,8 @@ type Query {
   createAccountLink(id: String!): StripeCreateAccountLink!
   createLoginLink(id: String!): StripeCreateLoginLink!
   getRestaurantById(id: String!): Restaurant!
+  getUsersFromRestaurant(restaurantId: String!): UsersRestaurant!
+  getUsersFromRole(restaurantId: String!, roles: [UserRole!]!): UsersRestaurant!
   listManagersByRestaurant(restaurantId: String!): [User!]!
   listEmployeesByRestaurant(restaurantId: String!): [User!]!
 }

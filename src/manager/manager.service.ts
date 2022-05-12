@@ -132,7 +132,7 @@ export class ManagerService {
       UserRole.OWNER,
     );
 
-    const deleteManager = await this.userRepository.softDelete({
+    const deleteManager = await this.userRepository.delete({
       id: managerId,
     });
 

@@ -95,4 +95,42 @@ export class RestaurantService {
 
     return getUpdatedRestaurant;
   }
+
+  async getAllUsersFromRestaurant(restaurantId: string) {
+    const getUsersFromRestaurant = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .getManyAndCount();
+
+    if (!getUsersFromRestaurant) {
+      throw new InternalServerErrorException(
+        'Cannot find users from restaurant',
+      );
+    }
+    return {
+      users: getUsersFromRestaurant[0],
+      count: getUsersFromRestaurant[1],
+    };
+  }
+
+  async getUsersFromRole(restaurantId: string, roles: UserRole[]) {
+    const getUsers = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('user.role IN (:...roles)', { roles })
+      .getManyAndCount();
+
+    if (!getUsers) {
+      throw new InternalServerErrorException(
+        'Cannot find users from restaurant by role',
+      );
+    }
+
+    return {
+      users: getUsers[0],
+      count: getUsers[1],
+    };
+  }
 }

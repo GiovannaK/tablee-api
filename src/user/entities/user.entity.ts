@@ -93,9 +93,6 @@ export class User {
   @JoinTable()
   restaurant: Restaurant[];
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @CreateDateColumn()
   createdAt: Date;
 

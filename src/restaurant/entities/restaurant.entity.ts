@@ -114,9 +114,6 @@ export class Restaurant {
   @JoinColumn()
   address: Address;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @CreateDateColumn()
   createdAt: Date;
 

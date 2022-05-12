@@ -132,7 +132,7 @@ export class EmployeeService {
       [UserRole.OWNER, UserRole.MANAGER],
     );
 
-    const deleteEmployee = await this.userRepository.softDelete({
+    const deleteEmployee = await this.userRepository.delete({
       id: employeeId,
     });
 

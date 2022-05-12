@@ -8,6 +8,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
 import { CreateRestaurantInput } from './dto/create-restaurant.input';
 import { UpdateRestaurantInput } from './dto/update-restaurant.input';
+import { UsersRestaurant } from './dto/users-restaurant';
 import { Restaurant } from './entities/restaurant.entity';
 import { RestaurantService } from './restaurant.service';
 
@@ -29,9 +30,32 @@ export class RestaurantResolver {
     return restaurant;
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => Restaurant)
   async getRestaurantById(@Args('id') id: string) {
     const restaurant = await this.restaurantService.getRestaurantById(id);
+    return restaurant;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => UsersRestaurant)
+  async getUsersFromRestaurant(@Args('restaurantId') restaurantId: string) {
+    const restaurant = await this.restaurantService.getAllUsersFromRestaurant(
+      restaurantId,
+    );
+    return restaurant;
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => UsersRestaurant)
+  async getUsersFromRole(
+    @Args('restaurantId') restaurantId: string,
+    @Args({ name: 'roles', type: () => [UserRole] }) roles: UserRole[],
+  ) {
+    const restaurant = await this.restaurantService.getUsersFromRole(
+      restaurantId,
+      roles,
+    );
     return restaurant;
   }
 

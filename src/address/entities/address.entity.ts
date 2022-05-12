@@ -69,9 +69,6 @@ export class Address {
   })
   restaurant: Restaurant;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @CreateDateColumn()
   createdAt: Date;
 

@@ -34,9 +34,6 @@ export class Profile {
   })
   user: User;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @CreateDateColumn()
   createdAt: Date;
 
