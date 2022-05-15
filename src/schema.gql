@@ -69,11 +69,20 @@ enum BrazilianStates {
   TO
 }
 
+type Menu {
+  id: ID!
+  restaurant: Restaurant
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
   user: [User!]
   restaurantImage: [RestaurantImage!]
+  menu: [Menu!]
   address: Address
   name: String!
   cnpj: String!

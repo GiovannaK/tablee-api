@@ -3,7 +3,6 @@ import { RestaurantImage } from '../../images/entities/restaurantImage.entity';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToMany,
@@ -15,6 +14,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { RestaurantCategory } from './enums/category.enum';
 import { Address } from '../../address/entities/address.entity';
+import { Menu } from '../../menu/entities/menu.entity';
 
 @ObjectType()
 @Entity()
@@ -108,6 +108,14 @@ export class Restaurant {
     },
   )
   restaurantImage: RestaurantImage[];
+
+  @Field(() => [Menu], { nullable: true })
+  @OneToMany(() => Menu, (menu: Menu) => menu.restaurant, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  menu: Menu[];
 
   @Field(() => Address, { nullable: true })
   @OneToOne(() => Address, { cascade: true })

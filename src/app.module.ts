@@ -21,6 +21,7 @@ import { ManagerModule } from './manager/manager.module';
 import { PermissionModule } from './permission/permission.module';
 import { EmployeeModule } from './employee/employee.module';
 import { AddressModule } from './address/address.module';
+import { MenuModule } from './menu/menu.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -60,6 +61,7 @@ import * as Joi from '@hapi/joi';
     PermissionModule,
     EmployeeModule,
     AddressModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
