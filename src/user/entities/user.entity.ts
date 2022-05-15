@@ -8,12 +8,14 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './role/userRole';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
+import { Booking } from 'src/booking/entities/booking.entity';
 
 @ObjectType()
 @Entity()
@@ -92,6 +94,14 @@ export class User {
   })
   @JoinTable()
   restaurant: Restaurant[];
+
+  @Field(() => [Booking], { nullable: true })
+  @OneToMany(() => Booking, (booking: Booking) => booking.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  booking: Booking[];
 
   @CreateDateColumn()
   createdAt: Date;

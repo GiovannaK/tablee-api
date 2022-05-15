@@ -15,6 +15,7 @@ import { User } from '../../user/entities/user.entity';
 import { RestaurantCategory } from './enums/category.enum';
 import { Address } from '../../address/entities/address.entity';
 import { Menu } from '../../menu/entities/menu.entity';
+import { Booking } from '../../booking/entities/booking.entity';
 
 @ObjectType()
 @Entity()
@@ -116,6 +117,14 @@ export class Restaurant {
     onUpdate: 'CASCADE',
   })
   menu: Menu[];
+
+  @Field(() => [Booking], { nullable: true })
+  @OneToMany(() => Booking, (booking: Booking) => booking.restaurant, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  booking: Booking[];
 
   @Field(() => Address, { nullable: true })
   @OneToOne(() => Address, { cascade: true })

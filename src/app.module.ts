@@ -22,6 +22,8 @@ import { PermissionModule } from './permission/permission.module';
 import { EmployeeModule } from './employee/employee.module';
 import { AddressModule } from './address/address.module';
 import { MenuModule } from './menu/menu.module';
+import { BookingModule } from './booking/booking.module';
+import { TableModule } from './table/table.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -62,6 +64,8 @@ import * as Joi from '@hapi/joi';
     EmployeeModule,
     AddressModule,
     MenuModule,
+    BookingModule,
+    TableModule,
   ],
   controllers: [AppController],
   providers: [AppService],

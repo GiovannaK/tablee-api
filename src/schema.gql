@@ -69,12 +69,83 @@ enum BrazilianStates {
   TO
 }
 
+type MenuItem {
+  id: ID!
+  menu: Menu
+  category: MenuItemCategoryPortuguese!
+  name: String!
+  description: String!
+  price: Float!
+  url: String!
+  key: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum MenuItemCategoryPortuguese {
+  BEBIDA
+  PRATOPRINCIPAL
+  SOBREMESA
+  ENTRADA
+}
+
 type Menu {
   id: ID!
   restaurant: Restaurant
+  menuItem: [MenuItem!]
   title: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Table {
+  id: ID!
+  category: TableCategoryPortuguese!
+  booking: Booking
+  restaurant: Restaurant
+  tableNumber: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TableCategoryPortuguese {
+  INTERNA
+  EXTERNA
+  BAR
+}
+
+type Booking {
+  id: ID!
+  specialDate: SpecialDatePortuguese!
+  bookingStatus: BookingStatusPortuguese!
+  user: User
+  restaurant: Restaurant
+  table: [Table!]
+  date: DateTime!
+  hour: String!
+  partyFor: Float!
+  extras: String!
+  isCancelledByUser: Boolean!
+  isCancelledByRestaurant: Boolean!
+  isConfirmed: Boolean!
+  hasArrived: Boolean!
+  code: String!
+  createdByWaitList: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum SpecialDatePortuguese {
+  ANIVERSARIO
+  CELEBRACAO
+  REFEICAO_NEGOCIOS
+  ENCONTRO
+}
+
+enum BookingStatusPortuguese {
+  PENDENTE
+  APROVADA
+  REJEITADA
 }
 
 type Restaurant {
@@ -83,6 +154,7 @@ type Restaurant {
   user: [User!]
   restaurantImage: [RestaurantImage!]
   menu: [Menu!]
+  booking: [Booking!]
   address: Address
   name: String!
   cnpj: String!
@@ -137,6 +209,7 @@ type User {
   role: UserRole!
   profile: Profile
   restaurant: [Restaurant!]
+  booking: [Booking!]
   firstName: String!
   lastName: String!
   email: String!
