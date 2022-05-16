@@ -16,6 +16,8 @@ import { RestaurantCategory } from './enums/category.enum';
 import { Address } from '../../address/entities/address.entity';
 import { Menu } from '../../menu/entities/menu.entity';
 import { Booking } from '../../booking/entities/booking.entity';
+import { DressCodePortuguese } from './enums/dressCode.enum';
+import { PaymentTypesPortuguese } from './enums/payment.enum';
 
 @ObjectType()
 @Entity()
@@ -63,6 +65,22 @@ export class Restaurant {
   @Field(() => RestaurantCategory)
   category: RestaurantCategory;
 
+  @Column({
+    type: 'enum',
+    enum: DressCodePortuguese,
+    default: DressCodePortuguese.CASUAL,
+  })
+  @Field(() => DressCodePortuguese)
+  dressCode: DressCodePortuguese;
+
+  @Column('enum', {
+    array: true,
+    enum: PaymentTypesPortuguese,
+    default: [PaymentTypesPortuguese.MONEY],
+  })
+  @Field(() => [PaymentTypesPortuguese])
+  acceptedPaymentMethods: PaymentTypesPortuguese[];
+
   @Column({ default: false })
   isWifi: boolean;
 
@@ -91,6 +109,16 @@ export class Restaurant {
     nullable: true,
   })
   stripeAccountId?: string;
+
+  @Column({
+    nullable: true,
+  })
+  thumbUrl: string;
+
+  @Column({
+    nullable: true,
+  })
+  thumbKey: string;
 
   @Field(() => [User], { nullable: true })
   @ManyToMany(() => User, (user: User) => user.restaurant, {
