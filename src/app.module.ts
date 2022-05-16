@@ -24,6 +24,7 @@ import { AddressModule } from './address/address.module';
 import { MenuModule } from './menu/menu.module';
 import { BookingModule } from './booking/booking.module';
 import { TableModule } from './table/table.module';
+import { ReviewModule } from './review/review.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -66,6 +67,7 @@ import * as Joi from '@hapi/joi';
     MenuModule,
     BookingModule,
     TableModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],

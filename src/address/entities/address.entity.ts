@@ -2,7 +2,6 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,

@@ -5,6 +5,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +14,7 @@ import { SpecialDatePortuguese } from './enums/specialDate.enum';
 import { BookingStatusPortuguese } from './enums/bookingStatus.enum';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Table } from '../../table/entities/table.entity';
+import { Review } from '../../review/entities/review.entity';
 
 @ObjectType()
 @Entity()
@@ -106,6 +108,13 @@ export class Booking {
     onUpdate: 'CASCADE',
   })
   table: Table[];
+
+  @Field(() => Review, { nullable: true })
+  @OneToOne(() => Review, (review: Review) => review.booking, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  review: Review;
 
   @Column({
     nullable: false,
