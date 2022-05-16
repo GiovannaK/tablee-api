@@ -25,6 +25,103 @@ type RestaurantImage {
   updatedAt: DateTime!
 }
 
+type MenuItem {
+  id: ID!
+  menu: Menu
+  category: MenuItemCategoryPortuguese!
+  name: String!
+  description: String!
+  price: Float!
+  url: String!
+  key: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum MenuItemCategoryPortuguese {
+  BEBIDA
+  PRATOPRINCIPAL
+  SOBREMESA
+  ENTRADA
+}
+
+type Menu {
+  id: ID!
+  restaurant: Restaurant
+  menuItem: [MenuItem!]
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Table {
+  id: ID!
+  category: TableCategoryPortuguese!
+  status: TableStatusPortuguese!
+  booking: Booking
+  restaurant: Restaurant
+  tableNumber: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum TableCategoryPortuguese {
+  INTERNA
+  EXTERNA
+  BAR
+}
+
+enum TableStatusPortuguese {
+  DISPONIVEL
+  OCUPADA
+  INDISPONIVEL
+}
+
+type Review {
+  id: ID!
+  restaurant: Restaurant
+  booking: Booking
+  rating: Float!
+  comment: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Booking {
+  id: ID!
+  specialDate: SpecialDatePortuguese!
+  bookingStatus: BookingStatusPortuguese!
+  user: User
+  restaurant: Restaurant
+  table: [Table!]
+  review: Review
+  date: DateTime!
+  hour: String!
+  partyFor: Float!
+  extras: String!
+  isCancelledByUser: Boolean!
+  isCancelledByRestaurant: Boolean!
+  isConfirmed: Boolean!
+  hasArrived: Boolean!
+  code: String!
+  createdByWaitList: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum SpecialDatePortuguese {
+  ANIVERSARIO
+  CELEBRACAO
+  REFEICAO_NEGOCIOS
+  ENCONTRO
+}
+
+enum BookingStatusPortuguese {
+  PENDENTE
+  APROVADA
+  REJEITADA
+}
+
 type Address {
   id: ID!
   state: BrazilianStates!
@@ -69,92 +166,16 @@ enum BrazilianStates {
   TO
 }
 
-type MenuItem {
-  id: ID!
-  menu: Menu
-  category: MenuItemCategoryPortuguese!
-  name: String!
-  description: String!
-  price: Float!
-  url: String!
-  key: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum MenuItemCategoryPortuguese {
-  BEBIDA
-  PRATOPRINCIPAL
-  SOBREMESA
-  ENTRADA
-}
-
-type Menu {
-  id: ID!
-  restaurant: Restaurant
-  menuItem: [MenuItem!]
-  title: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Table {
-  id: ID!
-  category: TableCategoryPortuguese!
-  booking: Booking
-  restaurant: Restaurant
-  tableNumber: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum TableCategoryPortuguese {
-  INTERNA
-  EXTERNA
-  BAR
-}
-
-type Booking {
-  id: ID!
-  specialDate: SpecialDatePortuguese!
-  bookingStatus: BookingStatusPortuguese!
-  user: User
-  restaurant: Restaurant
-  table: [Table!]
-  date: DateTime!
-  hour: String!
-  partyFor: Float!
-  extras: String!
-  isCancelledByUser: Boolean!
-  isCancelledByRestaurant: Boolean!
-  isConfirmed: Boolean!
-  hasArrived: Boolean!
-  code: String!
-  createdByWaitList: Boolean!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum SpecialDatePortuguese {
-  ANIVERSARIO
-  CELEBRACAO
-  REFEICAO_NEGOCIOS
-  ENCONTRO
-}
-
-enum BookingStatusPortuguese {
-  PENDENTE
-  APROVADA
-  REJEITADA
-}
-
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
+  dressCode: DressCodePortuguese!
+  acceptedPaymentMethods: [PaymentTypesPortuguese!]!
   user: [User!]
   restaurantImage: [RestaurantImage!]
   menu: [Menu!]
   booking: [Booking!]
+  review: [Review!]
   address: Address
   name: String!
   cnpj: String!
@@ -170,6 +191,8 @@ type Restaurant {
   weekend_end_hour: String!
   capacity: Float!
   stripeAccountId: String
+  thumbUrl: String!
+  thumbKey: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -202,6 +225,21 @@ enum RestaurantCategory {
   ARGENTINO
   FRUTOSDOMAR
   STEAKHOUSE
+}
+
+enum DressCodePortuguese {
+  RESORT
+  BUSINESS
+  CASUAL
+  FORMAL
+}
+
+enum PaymentTypesPortuguese {
+  MASTERCARD
+  VISA
+  DISCOVER
+  AMEX
+  MONEY
 }
 
 type User {
@@ -290,6 +328,7 @@ type Mutation {
   updateEmployee(data: UpdateEmployeeInput!): User!
   createAddress(data: CreateAddressInput!): AddressWithRestaurant!
   updateAddress(data: UpdateAddressInput!): Address!
+  createMenu(data: CreateMenuInput!): Menu!
 }
 
 input CreateUserInput {
@@ -419,4 +458,9 @@ input UpdateAddressInput {
   neighborhood: String
   street: String
   number: Float
+}
+
+input CreateMenuInput {
+  title: String!
+  restaurantId: String!
 }
