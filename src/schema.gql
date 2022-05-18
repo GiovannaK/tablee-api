@@ -300,6 +300,11 @@ type AddressWithRestaurant {
   number: Float!
 }
 
+type MenuMenuItems {
+  menuItem: [MenuItem!]!
+  menu: Menu!
+}
+
 type Query {
   getCurrentUser: User!
   createAccountLink(id: String!): StripeCreateAccountLink!
@@ -309,6 +314,9 @@ type Query {
   getUsersFromRole(restaurantId: String!, roles: [UserRole!]!): UsersRestaurant!
   listManagersByRestaurant(restaurantId: String!): [User!]!
   listEmployeesByRestaurant(restaurantId: String!): [User!]!
+  getMenuWithItems(menuId: String!): MenuMenuItems!
+  getMenu(menuId: String!): Menu!
+  getMenuItem(menuItemId: String!): MenuItem!
 }
 
 type Mutation {
@@ -329,6 +337,11 @@ type Mutation {
   createAddress(data: CreateAddressInput!): AddressWithRestaurant!
   updateAddress(data: UpdateAddressInput!): Address!
   createMenu(data: CreateMenuInput!): Menu!
+  createMenuItem(data: CreateMenuItemInput!): MenuItem!
+  updateMenu(data: UpdateMenuInput!): Menu!
+  updateMenuItem(data: UpdateMenuItemInput!): MenuItem!
+  deleteMenu(id: String!, restaurantId: String!): Boolean!
+  deleteMenuItem(id: String!, restaurantId: String!): Boolean!
 }
 
 input CreateUserInput {
@@ -462,5 +475,29 @@ input UpdateAddressInput {
 
 input CreateMenuInput {
   title: String!
+  restaurantId: String!
+}
+
+input CreateMenuItemInput {
+  name: String!
+  description: String!
+  price: Float!
+  category: String!
+  menuId: String!
+  restaurantId: String!
+}
+
+input UpdateMenuInput {
+  id: String!
+  title: String
+  restaurantId: String!
+}
+
+input UpdateMenuItemInput {
+  id: String!
+  name: String
+  description: String
+  price: Float
+  category: String
   restaurantId: String!
 }

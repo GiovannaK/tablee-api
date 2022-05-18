@@ -7,6 +7,7 @@ import { FileModule } from '../file/file.module';
 import { PermissionModule } from '../permission/permission.module';
 import { RestaurantModule } from '../restaurant/restaurant.module';
 import { MenuItem } from './entities/menuItem.entity';
+import { MenuController } from './menu.controller';
 
 @Module({
   providers: [MenuService, MenuResolver],
@@ -17,5 +18,6 @@ import { MenuItem } from './entities/menuItem.entity';
     PermissionModule,
     RestaurantModule,
   ],
+  controllers: [MenuController],
 })
 export class MenuModule {}

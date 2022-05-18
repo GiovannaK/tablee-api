@@ -6,7 +6,7 @@ export class UpdateManagerInput {
   @IsOptional()
   @Field()
   @IsString()
-  @Length(1, 200)
+  @IsUUID()
   id: string;
 
   @IsOptional()

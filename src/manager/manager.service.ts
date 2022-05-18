@@ -136,7 +136,7 @@ export class ManagerService {
       id: managerId,
     });
 
-    if (!deleteManager.affected) {
+    if (!deleteManager) {
       throw new InternalServerErrorException('Cannot delete manager');
     }
 

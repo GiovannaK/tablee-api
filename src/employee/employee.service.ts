@@ -136,7 +136,7 @@ export class EmployeeService {
       id: employeeId,
     });
 
-    if (!deleteEmployee.affected) {
+    if (!deleteEmployee) {
       throw new InternalServerErrorException('Cannot delete employee');
     }
 

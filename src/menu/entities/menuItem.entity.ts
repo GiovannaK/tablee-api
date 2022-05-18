@@ -52,12 +52,12 @@ export class MenuItem {
   category: MenuItemCategoryPortuguese;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   url: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
   key: string;
 
