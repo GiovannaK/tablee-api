@@ -106,6 +106,33 @@ export class Restaurant {
   @Column({ type: 'integer', nullable: false })
   capacity: number;
 
+  @Column({ type: 'time', nullable: true })
+  brunch_start_hour: string;
+
+  @Column({ type: 'time', nullable: true })
+  brunch_end_hour: string;
+
+  @Column({ type: 'time', nullable: true })
+  lunch_start_hour: string;
+
+  @Column({ type: 'time', nullable: true })
+  lunch_end_hour: string;
+
+  @Column({ type: 'time', nullable: true })
+  dinner_start_hour: string;
+
+  @Column({ type: 'time', nullable: true })
+  dinner_end_hour: string;
+
+  @Column({ default: true })
+  isAvailableForBrunch: boolean;
+
+  @Column({ default: true })
+  isAvailableForLunch: boolean;
+
+  @Column({ default: true })
+  isAvailableForDinner: boolean;
+
   @Column({
     nullable: true,
   })

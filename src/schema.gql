@@ -190,6 +190,15 @@ type Restaurant {
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
+  brunch_start_hour: String!
+  brunch_end_hour: String!
+  lunch_start_hour: String!
+  lunch_end_hour: String!
+  dinner_start_hour: String!
+  dinner_end_hour: String!
+  isAvailableForBrunch: Boolean!
+  isAvailableForLunch: Boolean!
+  isAvailableForDinner: Boolean!
   stripeAccountId: String
   thumbUrl: String!
   thumbKey: String!
@@ -395,6 +404,15 @@ input CreateRestaurantInput {
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
+  brunch_start_hour: String!
+  brunch_end_hour: String!
+  lunch_start_hour: String!
+  lunch_end_hour: String!
+  dinner_start_hour: String!
+  dinner_end_hour: String!
+  isAvailableForBrunch: Boolean!
+  isAvailableForLunch: Boolean!
+  isAvailableForDinner: Boolean!
 }
 
 input UpdateRestaurantInput {
@@ -412,6 +430,15 @@ input UpdateRestaurantInput {
   weekend_start_hour: String
   weekend_end_hour: String
   capacity: Float
+  brunch_start_hour: String
+  brunch_end_hour: String
+  lunch_start_hour: String
+  lunch_end_hour: String
+  dinner_start_hour: String
+  dinner_end_hour: String
+  isAvailableForBrunch: Boolean
+  isAvailableForLunch: Boolean
+  isAvailableForDinner: Boolean
 }
 
 input CreateManagerInput {

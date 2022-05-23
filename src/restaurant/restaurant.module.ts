@@ -7,7 +7,9 @@ import { UserModule } from '../user/user.module';
 import { StripeModule } from '../stripe/stripe.module';
 import { RestaurantImage } from '../images/entities/restaurantImage.entity';
 import { User } from '../user/entities/user.entity';
-import { PermissionModule } from 'src/permission/permission.module';
+import { PermissionModule } from '../permission/permission.module';
+import { FileModule } from '../file/file.module';
+import { RestaurantController } from './restaurant.controller';
 
 @Module({
   imports: [
@@ -15,8 +17,10 @@ import { PermissionModule } from 'src/permission/permission.module';
     UserModule,
     StripeModule,
     PermissionModule,
+    FileModule,
   ],
   providers: [RestaurantService, RestaurantResolver],
   exports: [RestaurantService],
+  controllers: [RestaurantController],
 })
 export class RestaurantModule {}

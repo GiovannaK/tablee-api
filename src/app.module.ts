@@ -46,6 +46,9 @@ import * as Joi from '@hapi/joi';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       context: ({ req, res }) => ({ req, res }),
+      subscriptions: {
+        'graphql-ws': true,
+      },
     }),
     UserModule,
     EmailModule,

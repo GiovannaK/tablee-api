@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PermissionService } from '../permission/permission.service';
 import { UpdateRestaurantInput } from '../restaurant/dto/update-restaurant.input';
 import { UserRole } from '../user/entities/role/userRole';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class RestaurantService {
@@ -18,6 +19,7 @@ export class RestaurantService {
     private readonly restaurantRepository: Repository<Restaurant>,
     private readonly stripeService: StripeService,
     private readonly permissionService: PermissionService,
+    private readonly fileService: FileService,
   ) {}
 
   async createRestaurant(restaurantInput: CreateRestaurantInput, user: User) {
@@ -94,6 +96,61 @@ export class RestaurantService {
     const getUpdatedRestaurant = await this.getRestaurantById(restaurantId);
 
     return getUpdatedRestaurant;
+  }
+
+  async addRestaurantThumb(
+    restaurantId: string,
+    currentUser: User,
+    imageBuffer: Buffer,
+    filename: string,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+
+    const getRestaurant = await this.getRestaurantByIdNoRelations(restaurantId);
+
+    if (getRestaurant.thumbUrl) {
+      await this.deleteRestaurantImageThumb(
+        getRestaurant.thumbKey,
+        getRestaurant.id,
+      );
+    }
+
+    const image = await this.fileService.uploadFile(imageBuffer, filename);
+
+    await this.restaurantRepository.update(getRestaurant.id, {
+      thumbUrl: image.url,
+      thumbKey: image.key,
+    });
+
+    const updatedRestaurantThumb = await this.restaurantRepository.create({
+      ...getRestaurant,
+      thumbUrl: image.url,
+      thumbKey: image.key,
+    });
+
+    if (!updatedRestaurantThumb) {
+      throw new InternalServerErrorException('Cannot add restaurant thumb');
+    }
+
+    return updatedRestaurantThumb;
+  }
+
+  async deleteRestaurantImageThumb(key: string, id: string) {
+    await this.fileService.deleteUploadedFile(key);
+    const deleteFromMenuItem = await this.restaurantRepository.update(id, {
+      thumbUrl: null,
+      thumbKey: null,
+    });
+
+    if (!deleteFromMenuItem) {
+      throw new InternalServerErrorException('Cannot delete menu item image');
+    }
+
+    return;
   }
 
   async getAllUsersFromRestaurant(restaurantId: string) {

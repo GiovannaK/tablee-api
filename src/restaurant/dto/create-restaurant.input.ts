@@ -64,4 +64,31 @@ export class CreateRestaurantInput {
   @IsInt()
   @IsNotEmpty()
   capacity: number;
+
+  @IsOptional()
+  brunch_start_hour: string;
+
+  @IsOptional()
+  brunch_end_hour: string;
+
+  @IsOptional()
+  lunch_start_hour: string;
+
+  @IsOptional()
+  lunch_end_hour: string;
+
+  @IsOptional()
+  dinner_start_hour: string;
+
+  @IsOptional()
+  dinner_end_hour: string;
+
+  @IsNotEmpty()
+  isAvailableForBrunch: boolean;
+
+  @IsNotEmpty()
+  isAvailableForLunch: boolean;
+
+  @IsNotEmpty()
+  isAvailableForDinner: boolean;
 }
