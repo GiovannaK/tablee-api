@@ -41,6 +41,12 @@ export class Table {
   @Field(() => TableStatusPortuguese)
   status: TableStatusPortuguese;
 
+  @Column({
+    type: 'integer',
+    default: 2,
+  })
+  seats: number;
+
   @Field(() => Booking, { nullable: true })
   @ManyToOne(() => Booking, (booking: Booking) => booking.table, {
     onDelete: 'CASCADE',
