@@ -353,7 +353,7 @@ type Mutation {
   deleteMenu(id: String!, restaurantId: String!): Boolean!
   deleteMenuItem(id: String!, restaurantId: String!): Boolean!
   createTable(data: CreateTableInput!): Table!
-  createMultipleTables(data: CreateTableInput!, quantity: Float!): [Table!]!
+  createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
   deleteTablesInBulk(tableIds: [String!]!): Boolean!
 }

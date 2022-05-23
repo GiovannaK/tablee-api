@@ -32,11 +32,13 @@ export class TableResolver {
     @Args('data') data: CreateTableInput,
     @CurrentUser() currentUser: User,
     @Args('quantity') quantity: number,
+    @Args('initialTableNumber') initialTableNumber: number,
   ) {
     const table = await this.tableService.createMulipleTablesInBulk(
       data,
       quantity,
       currentUser,
+      initialTableNumber,
     );
     return table;
   }

@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { TableCategoryPortuguese } from '../entities/enums/tableCategory.enum';
 import { TableStatusPortuguese } from '../entities/enums/tableStatus.enum';
 
@@ -7,7 +7,7 @@ import { TableStatusPortuguese } from '../entities/enums/tableStatus.enum';
 export class CreateTableInput {
   @IsOptional()
   @Field()
-  @IsNumber()
+  @IsInt()
   tableNumber?: number;
 
   @Field()
@@ -16,6 +16,7 @@ export class CreateTableInput {
 
   @Field()
   @IsNotEmpty()
+  @IsInt()
   seats: 2;
 
   @IsOptional()

@@ -46,7 +46,13 @@ export class TableService {
     createTableInput: CreateTableInput,
     quantity: number,
     currentUser: User,
+    initialTableNumber: number,
   ) {
+    if (quantity > 10) {
+      throw new InternalServerErrorException(
+        'Maximum 10 tables can be created at a time',
+      );
+    }
     await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
       currentUser.id,
       createTableInput.restaurantId,
@@ -58,7 +64,11 @@ export class TableService {
       );
 
     const tables = [];
-    for (let i = 1; i <= quantity; i++) {
+    for (
+      let i = initialTableNumber;
+      i <= initialTableNumber + quantity - 1;
+      i++
+    ) {
       const table = await this.tableRepository.create({
         ...createTableInput,
         restaurant: getRestaurant,
