@@ -352,6 +352,7 @@ type Mutation {
   updateMenuItem(data: UpdateMenuItemInput!): MenuItem!
   deleteMenu(id: String!, restaurantId: String!): Boolean!
   deleteMenuItem(id: String!, restaurantId: String!): Boolean!
+  createBooking(data: CreateBookingInput!): Booking!
   createTable(data: CreateTableInput!): Table!
   createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
@@ -534,10 +535,23 @@ input UpdateMenuItemInput {
   restaurantId: String!
 }
 
+input CreateBookingInput {
+  date: DateTime!
+  hour: String!
+  extras: String
+  restaurantId: String!
+  partyFor: Float!
+  specialDate: String
+}
+
 input CreateTableInput {
   tableNumber: Float
   category: String!
   seats: Float!
   status: String
   restaurantId: String!
+}
+
+type Subscription {
+  bookingAdded: Booking!
 }

@@ -40,7 +40,7 @@ export class Booking {
 
   @Column({
     length: 5000,
-    nullable: false,
+    nullable: true,
   })
   extras: string;
 
@@ -77,6 +77,7 @@ export class Booking {
   @Column({
     type: 'enum',
     enum: SpecialDatePortuguese,
+    nullable: true,
   })
   @Field(() => SpecialDatePortuguese)
   specialDate: SpecialDatePortuguese;

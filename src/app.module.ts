@@ -25,6 +25,7 @@ import { MenuModule } from './menu/menu.module';
 import { BookingModule } from './booking/booking.module';
 import { TableModule } from './table/table.module';
 import { ReviewModule } from './review/review.module';
+import { PubsubModule } from './pubsub/pubsub.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -48,6 +49,7 @@ import * as Joi from '@hapi/joi';
       context: ({ req, res }) => ({ req, res }),
       subscriptions: {
         'graphql-ws': true,
+        'subscriptions-transport-ws': true,
       },
     }),
     UserModule,
@@ -71,6 +73,7 @@ import * as Joi from '@hapi/joi';
     BookingModule,
     TableModule,
     ReviewModule,
+    PubsubModule,
   ],
   controllers: [AppController],
   providers: [AppService],
