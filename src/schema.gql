@@ -96,7 +96,7 @@ type Booking {
   restaurant: Restaurant
   table: [Table!]
   review: Review
-  date: DateTime!
+  date: String!
   hour: String!
   partyFor: Float!
   extras: String!
@@ -315,6 +315,12 @@ type MenuMenuItems {
   menu: Menu!
 }
 
+type BookingUserRestaurant {
+  user: User!
+  restaurant: Restaurant!
+  booking: Booking!
+}
+
 type Query {
   getCurrentUser: User!
   createAccountLink(id: String!): StripeCreateAccountLink!
@@ -352,7 +358,7 @@ type Mutation {
   updateMenuItem(data: UpdateMenuItemInput!): MenuItem!
   deleteMenu(id: String!, restaurantId: String!): Boolean!
   deleteMenuItem(id: String!, restaurantId: String!): Boolean!
-  createBooking(data: CreateBookingInput!): Booking!
+  createBooking(data: CreateBookingInput!): BookingUserRestaurant!
   createTable(data: CreateTableInput!): Table!
   createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
@@ -536,7 +542,7 @@ input UpdateMenuItemInput {
 }
 
 input CreateBookingInput {
-  date: DateTime!
+  date: String!
   hour: String!
   extras: String
   restaurantId: String!
@@ -553,5 +559,5 @@ input CreateTableInput {
 }
 
 type Subscription {
-  bookingAdded: Booking!
+  bookingAdded: BookingUserRestaurant!
 }

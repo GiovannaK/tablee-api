@@ -24,12 +24,11 @@ export class Booking {
   id: string;
 
   @Column({
-    nullable: true,
-    type: 'timestamptz',
+    nullable: false,
   })
-  date: Date;
+  date: string;
 
-  @Column({ type: 'time', nullable: true })
+  @Column({ type: 'time', nullable: false })
   hour: string;
 
   @Column({

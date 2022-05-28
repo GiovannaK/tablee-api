@@ -12,8 +12,8 @@ import { SpecialDatePortuguese } from '../entities/enums/specialDate.enum';
 @InputType()
 export class CreateBookingInput {
   @Field()
-  @IsDate()
-  date: Date;
+  @IsString()
+  date: string;
 
   @Field()
   @IsString()

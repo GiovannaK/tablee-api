@@ -37,11 +37,31 @@ export class BookingService {
       throw new InternalServerErrorException('Cannot create booking');
     }
 
-    return createdBooking;
+    const getCreatedBooking = await this.getBookingByIdWithAllRelations(
+      createdBooking.id,
+    );
+
+    return getCreatedBooking;
   }
 
   generateCode() {
     const code = crypto.randomBytes(3).toString('hex');
     return code;
+  }
+
+  async getBookingByIdWithAllRelations(id: string) {
+    const booking = await this.bookingRepository.findOne(id, {
+      relations: ['user', 'restaurant'],
+    });
+
+    if (!booking) {
+      throw new InternalServerErrorException('Cannot find booking');
+    }
+
+    return {
+      booking: booking,
+      user: booking.user,
+      restaurant: booking.restaurant,
+    };
   }
 }

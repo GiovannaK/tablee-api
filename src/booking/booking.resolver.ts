@@ -11,6 +11,7 @@ import { RolesGuard } from '../auth/role.guard';
 import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { User } from '../user/entities/user.entity';
+import { BookingUserRestaurant } from './dto/booking-user-restaurant.input';
 
 const BOOKING_ADDED_EVENT = 'bookingAdded';
 
@@ -21,12 +22,12 @@ export class BookingResolver {
     @Inject(PUB_SUB) private pubSub: RedisPubSub,
   ) {}
 
-  @Subscription(() => Booking)
+  @Subscription(() => BookingUserRestaurant)
   bookingAdded() {
     return this.pubSub.asyncIterator(BOOKING_ADDED_EVENT);
   }
 
-  @Mutation(() => Booking)
+  @Mutation(() => BookingUserRestaurant)
   @Roles(UserRole.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async createBooking(

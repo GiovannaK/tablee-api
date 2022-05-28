@@ -11,7 +11,7 @@ export const PUB_SUB = 'PUB_SUB';
         new RedisPubSub({
           connection: {
             host: process.env.REDIS_HOST,
-            port: process.env.REDIS_PORT,
+            port: parseInt(process.env.REDIS_PORT),
             username: process.env.REDIS_USERNAME,
             password: process.env.REDIS_PASSWORD,
             db: process.env.REDIS_NAME,
