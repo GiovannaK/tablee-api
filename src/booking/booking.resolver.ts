@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PUB_SUB } from '../pubsub/pubsub.module';
@@ -14,6 +15,7 @@ import { User } from '../user/entities/user.entity';
 import { BookingUserRestaurant } from './dto/booking-user-restaurant.input';
 
 const BOOKING_ADDED_EVENT = 'bookingAdded';
+const BOOKING_APPROVED_EVENT = 'bookingApproved';
 
 @Resolver()
 export class BookingResolver {
@@ -31,6 +33,11 @@ export class BookingResolver {
     return this.pubSub.asyncIterator(BOOKING_ADDED_EVENT);
   }
 
+  @Subscription(() => BookingUserRestaurant)
+  bookingApproved() {
+    return this.pubSub.asyncIterator(BOOKING_APPROVED_EVENT);
+  }
+
   @Mutation(() => BookingUserRestaurant)
   @Roles(UserRole.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,6 +47,23 @@ export class BookingResolver {
   ) {
     const booking = await this.bookingService.createBooking(data, currentUser);
     this.pubSub.publish(BOOKING_ADDED_EVENT, { bookingAdded: booking });
+    return booking;
+  }
+
+  @Mutation(() => BookingUserRestaurant)
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async approveBooking(
+    @Args('restaurantId') restaurantId: string,
+    @Args('bookingId') bookingId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const booking = await this.bookingService.approveBooking(
+      currentUser,
+      restaurantId,
+      bookingId,
+    );
+    this.pubSub.publish(BOOKING_APPROVED_EVENT, { bookingApproved: booking });
     return booking;
   }
 

@@ -8,6 +8,7 @@ import { Booking } from './entities/booking.entity';
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { PermissionService } from '../permission/permission.service';
 import { UserRole } from 'src/user/entities/role/userRole';
+import { BookingStatusPortuguese } from './entities/enums/bookingStatus.enum';
 const crypto = require('crypto');
 
 @Injectable()
@@ -98,5 +99,65 @@ export class BookingService {
     }
 
     return bookings;
+  }
+
+  async approveBooking(
+    currentUser: User,
+    restaurantId: string,
+    bookingId: string,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+
+    const findBooking = await this.getBookingByIdWithAllRelations(bookingId);
+
+    await this.bookingRepository
+      .createQueryBuilder()
+      .update(Booking)
+      .set({
+        bookingStatus: BookingStatusPortuguese.APROVADA,
+      })
+      .where('id = :bookingId', { bookingId: findBooking.booking.id })
+      .returning('*')
+      .updateEntity(true)
+      .execute();
+
+    const findBookingUpdatedBooking = await this.getBookingByIdWithAllRelations(
+      bookingId,
+    );
+    return findBookingUpdatedBooking;
+  }
+
+  async rejectBooking(
+    currentUser: User,
+    restaurantId: string,
+    bookingId: string,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+
+    const findBooking = await this.getBookingByIdWithAllRelations(bookingId);
+
+    await this.bookingRepository
+      .createQueryBuilder()
+      .update(Booking)
+      .set({
+        bookingStatus: BookingStatusPortuguese.REJEITADA,
+      })
+      .where('id = :bookingId', { bookingId: findBooking.booking.id })
+      .returning('*')
+      .updateEntity(true)
+      .execute();
+
+    const findBookingUpdatedBooking = await this.getBookingByIdWithAllRelations(
+      bookingId,
+    );
+    return findBookingUpdatedBooking;
   }
 }
