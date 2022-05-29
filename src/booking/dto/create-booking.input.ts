@@ -1,12 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import {
-  IsDate,
-  IsInt,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Length,
-} from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUUID, Length } from 'class-validator';
+import { TableCategoryPortuguese } from 'src/table/entities/enums/tableCategory.enum';
 import { SpecialDatePortuguese } from '../entities/enums/specialDate.enum';
 
 @InputType()
@@ -36,4 +30,8 @@ export class CreateBookingInput {
   @IsOptional()
   @Field()
   specialDate?: SpecialDatePortuguese;
+
+  @IsOptional()
+  @Field(() => [TableCategoryPortuguese])
+  tableCategoryPreferences?: TableCategoryPortuguese[];
 }

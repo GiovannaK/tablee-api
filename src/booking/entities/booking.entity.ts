@@ -15,6 +15,7 @@ import { BookingStatusPortuguese } from './enums/bookingStatus.enum';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Table } from '../../table/entities/table.entity';
 import { Review } from '../../review/entities/review.entity';
+import { TableCategoryPortuguese } from 'src/table/entities/enums/tableCategory.enum';
 
 @ObjectType()
 @Entity()
@@ -41,6 +42,7 @@ export class Booking {
     length: 5000,
     nullable: true,
   })
+  @Field(() => String, { nullable: true })
   extras: string;
 
   @Column({
@@ -78,7 +80,7 @@ export class Booking {
     enum: SpecialDatePortuguese,
     nullable: true,
   })
-  @Field(() => SpecialDatePortuguese)
+  @Field(() => SpecialDatePortuguese, { nullable: true })
   specialDate: SpecialDatePortuguese;
 
   @Column({
@@ -115,6 +117,14 @@ export class Booking {
     onUpdate: 'CASCADE',
   })
   review: Review;
+
+  @Column('enum', {
+    array: true,
+    enum: TableCategoryPortuguese,
+    nullable: true,
+  })
+  @Field(() => [TableCategoryPortuguese])
+  tableCategoryPreferences: TableCategoryPortuguese[];
 
   @Column({
     nullable: false,

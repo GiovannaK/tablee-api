@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { Booking } from './entities/booking.entity';
 import { RestaurantService } from '../restaurant/restaurant.service';
+import { PermissionService } from '../permission/permission.service';
+import { UserRole } from 'src/user/entities/role/userRole';
 const crypto = require('crypto');
 
 @Injectable()
@@ -14,6 +16,7 @@ export class BookingService {
     @InjectRepository(Booking)
     private readonly bookingRepository: Repository<Booking>,
     private readonly restaurantService: RestaurantService,
+    private readonly permissionService: PermissionService,
   ) {}
 
   async createBooking(
@@ -63,5 +66,37 @@ export class BookingService {
       user: booking.user,
       restaurant: booking.restaurant,
     };
+  }
+
+  async getCurrentUserBookings(currentUser: User) {
+    const bookings = await this.bookingRepository.find({
+      where: { user: currentUser },
+      relations: ['restaurant'],
+    });
+
+    if (!bookings) {
+      throw new InternalServerErrorException('Cannot find bookings');
+    }
+
+    return bookings;
+  }
+
+  async getRestaurantBookings(currentUser: User, restaurantId: string) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+
+    const bookings = await this.bookingRepository.find({
+      where: { restaurant: restaurantId },
+      relations: ['user'],
+    });
+
+    if (!bookings) {
+      throw new InternalServerErrorException('Cannot find bookings');
+    }
+
+    return bookings;
   }
 }

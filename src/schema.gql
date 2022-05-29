@@ -90,16 +90,17 @@ type Review {
 
 type Booking {
   id: ID!
-  specialDate: SpecialDatePortuguese!
+  extras: String
+  specialDate: SpecialDatePortuguese
   bookingStatus: BookingStatusPortuguese!
   user: User
   restaurant: Restaurant
   table: [Table!]
   review: Review
+  tableCategoryPreferences: [TableCategoryPortuguese!]!
   date: String!
   hour: String!
   partyFor: Float!
-  extras: String!
   isCancelledByUser: Boolean!
   isCancelledByRestaurant: Boolean!
   isConfirmed: Boolean!
@@ -333,6 +334,8 @@ type Query {
   getMenuWithItems(menuId: String!): MenuMenuItems!
   getMenu(menuId: String!): Menu!
   getMenuItem(menuItemId: String!): MenuItem!
+  getCurrentUserBookings: [Booking!]!
+  getRestaurantBookings(restaurantId: String!): [Booking!]!
 }
 
 type Mutation {
@@ -548,6 +551,7 @@ input CreateBookingInput {
   restaurantId: String!
   partyFor: Float!
   specialDate: String
+  tableCategoryPreferences: [TableCategoryPortuguese!]
 }
 
 input CreateTableInput {
@@ -559,5 +563,5 @@ input CreateTableInput {
 }
 
 type Subscription {
-  bookingAdded: BookingUserRestaurant!
+  bookingAdded(restaurantId: String!): BookingUserRestaurant!
 }

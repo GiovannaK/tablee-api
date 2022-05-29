@@ -1,5 +1,5 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PUB_SUB } from '../pubsub/pubsub.module';
 import { BookingService } from './booking.service';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
@@ -22,8 +22,12 @@ export class BookingResolver {
     @Inject(PUB_SUB) private pubSub: RedisPubSub,
   ) {}
 
-  @Subscription(() => BookingUserRestaurant)
-  bookingAdded() {
+  @Subscription(() => BookingUserRestaurant, {
+    filter: (payload, variables) => {
+      return payload.bookingAdded.restaurant.id === variables.restaurantId;
+    },
+  })
+  bookingAdded(@Args('restaurantId') restaurantId: string) {
     return this.pubSub.asyncIterator(BOOKING_ADDED_EVENT);
   }
 
@@ -36,6 +40,30 @@ export class BookingResolver {
   ) {
     const booking = await this.bookingService.createBooking(data, currentUser);
     this.pubSub.publish(BOOKING_ADDED_EVENT, { bookingAdded: booking });
+    return booking;
+  }
+
+  @Roles(UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Booking])
+  async getCurrentUserBookings(@CurrentUser() currentUser: User) {
+    const booking = await this.bookingService.getCurrentUserBookings(
+      currentUser,
+    );
+    return booking;
+  }
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Booking])
+  async getRestaurantBookings(
+    @Args('restaurantId') restaurantId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const booking = await this.bookingService.getRestaurantBookings(
+      currentUser,
+      restaurantId,
+    );
     return booking;
   }
 }
