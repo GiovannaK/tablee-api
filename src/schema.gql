@@ -363,6 +363,7 @@ type Mutation {
   deleteMenuItem(id: String!, restaurantId: String!): Boolean!
   createBooking(data: CreateBookingInput!): BookingUserRestaurant!
   approveBooking(restaurantId: String!, bookingId: String!): BookingUserRestaurant!
+  rejectBooking(restaurantId: String!, bookingId: String!): BookingUserRestaurant!
   createTable(data: CreateTableInput!): Table!
   createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
@@ -565,5 +566,6 @@ input CreateTableInput {
 
 type Subscription {
   bookingAdded(restaurantId: String!): BookingUserRestaurant!
-  bookingApproved: BookingUserRestaurant!
+  bookingApproved(restaurantId: String!): BookingUserRestaurant!
+  bookingReject(restaurantId: String!): BookingUserRestaurant!
 }

@@ -16,6 +16,7 @@ import { BookingUserRestaurant } from './dto/booking-user-restaurant.input';
 
 const BOOKING_ADDED_EVENT = 'bookingAdded';
 const BOOKING_APPROVED_EVENT = 'bookingApproved';
+const BOOKING_REJECT_EVENT = 'bookingReject';
 
 @Resolver()
 export class BookingResolver {
@@ -33,9 +34,22 @@ export class BookingResolver {
     return this.pubSub.asyncIterator(BOOKING_ADDED_EVENT);
   }
 
-  @Subscription(() => BookingUserRestaurant)
-  bookingApproved() {
+  @Subscription(() => BookingUserRestaurant, {
+    filter: (payload, variables) => {
+      return payload.bookingApproved.restaurant.id === variables.restaurantId;
+    },
+  })
+  bookingApproved(@Args('restaurantId') restaurantId: string) {
     return this.pubSub.asyncIterator(BOOKING_APPROVED_EVENT);
+  }
+
+  @Subscription(() => BookingUserRestaurant, {
+    filter: (payload, variables) => {
+      return payload.bookingReject.restaurant.id === variables.restaurantId;
+    },
+  })
+  bookingReject(@Args('restaurantId') restaurantId: string) {
+    return this.pubSub.asyncIterator(BOOKING_REJECT_EVENT);
   }
 
   @Mutation(() => BookingUserRestaurant)
@@ -64,6 +78,23 @@ export class BookingResolver {
       bookingId,
     );
     this.pubSub.publish(BOOKING_APPROVED_EVENT, { bookingApproved: booking });
+    return booking;
+  }
+
+  @Mutation(() => BookingUserRestaurant)
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async rejectBooking(
+    @Args('restaurantId') restaurantId: string,
+    @Args('bookingId') bookingId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const booking = await this.bookingService.rejectBooking(
+      currentUser,
+      restaurantId,
+      bookingId,
+    );
+    this.pubSub.publish(BOOKING_REJECT_EVENT, { bookingReject: booking });
     return booking;
   }
 
