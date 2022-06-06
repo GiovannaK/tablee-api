@@ -6,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -19,6 +20,9 @@ import { Booking } from '../../booking/entities/booking.entity';
 import { DressCodePortuguese } from './enums/dressCode.enum';
 import { PaymentTypesPortuguese } from './enums/payment.enum';
 import { Review } from '../../review/entities/review.entity';
+import { CancellationPolicy } from 'src/cancellation/entities/cancellation.entity';
+import { WaitList } from '../../waitlist/entities/waitList.entity';
+import { Favorite } from '../../favorite/entities/favorite.entity';
 
 @ObjectType()
 @Entity()
@@ -153,6 +157,22 @@ export class Restaurant {
     onDelete: 'CASCADE',
   })
   user: User[];
+
+  @Field(() => WaitList, { nullable: true })
+  @OneToOne(() => WaitList, { cascade: true })
+  @JoinColumn()
+  waitlist: WaitList;
+
+  @Field(() => Favorite, { nullable: true })
+  @ManyToOne(() => Favorite, (favorite: Favorite) => favorite.restaurant, {
+    onDelete: 'CASCADE',
+  })
+  favorite: Favorite;
+
+  @Field(() => CancellationPolicy, { nullable: true })
+  @OneToOne(() => CancellationPolicy, { cascade: true })
+  @JoinColumn()
+  cancellationPolicy: CancellationPolicy;
 
   @Field(() => [RestaurantImage], { nullable: true })
   @OneToMany(

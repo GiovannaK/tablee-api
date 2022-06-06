@@ -1,7 +1,8 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum MenuItemCategoryPortuguese {
-  BEBIDA = 'BEBIDA',
+  BEBIDA_ALCOOLICA = 'BEBIDA ALCOÓLICA',
+  BEBIDA_SEM_ALCOOL = 'BEBIDA SEM ÁLCOOL',
   PRATOPRINCIPAL = 'PRATO PRINCIPAL',
   SOBREMESA = 'SOBREMESA',
   ENTRADA = 'ENTRADA',

@@ -3,7 +3,6 @@ import { Profile } from '../../profile/entities/profile.entity';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -15,7 +14,8 @@ import {
 } from 'typeorm';
 import { UserRole } from './role/userRole';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
-import { Booking } from 'src/booking/entities/booking.entity';
+import { Booking } from '../../booking/entities/booking.entity';
+import { Favorite } from '../../favorite/entities/favorite.entity';
 
 @ObjectType()
 @Entity()
@@ -94,6 +94,11 @@ export class User {
   })
   @JoinTable()
   restaurant: Restaurant[];
+
+  @Field(() => Favorite, { nullable: true })
+  @OneToOne(() => Favorite, { cascade: true })
+  @JoinColumn()
+  favorite: Favorite;
 
   @Field(() => [Booking], { nullable: true })
   @OneToMany(() => Booking, (booking: Booking) => booking.user, {

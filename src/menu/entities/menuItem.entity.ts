@@ -46,7 +46,7 @@ export class MenuItem {
   @Column({
     type: 'enum',
     enum: MenuItemCategoryPortuguese,
-    default: MenuItemCategoryPortuguese.BEBIDA,
+    default: MenuItemCategoryPortuguese.BEBIDA_SEM_ALCOOL,
   })
   @Field(() => MenuItemCategoryPortuguese)
   category: MenuItemCategoryPortuguese;

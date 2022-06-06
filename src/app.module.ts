@@ -26,6 +26,10 @@ import { BookingModule } from './booking/booking.module';
 import { TableModule } from './table/table.module';
 import { ReviewModule } from './review/review.module';
 import { PubsubModule } from './pubsub/pubsub.module';
+import { CancellationModule } from './cancellation/cancellation.module';
+import { CancellationorderModule } from './cancellationorder/cancellationorder.module';
+import { WaitlistModule } from './waitlist/waitlist.module';
+import { FavoriteModule } from './favorite/favorite.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -74,6 +78,10 @@ import * as Joi from '@hapi/joi';
     TableModule,
     ReviewModule,
     PubsubModule,
+    CancellationModule,
+    CancellationorderModule,
+    WaitlistModule,
+    FavoriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

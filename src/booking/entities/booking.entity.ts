@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -16,6 +17,8 @@ import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Table } from '../../table/entities/table.entity';
 import { Review } from '../../review/entities/review.entity';
 import { TableCategoryPortuguese } from 'src/table/entities/enums/tableCategory.enum';
+import { BookingOrderCancellation } from '../../cancellationorder/entities/cancellationOrder.entity';
+import { WaitList } from 'src/waitlist/entities/waitList.entity';
 
 @ObjectType()
 @Entity()
@@ -97,6 +100,12 @@ export class Booking {
   })
   user: User;
 
+  @Field(() => WaitList, { nullable: true })
+  @ManyToOne(() => WaitList, (waitList: WaitList) => waitList.booking, {
+    onDelete: 'CASCADE',
+  })
+  waitList: WaitList;
+
   @Field(() => Restaurant, { nullable: true })
   @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.booking, {
     onDelete: 'CASCADE',
@@ -117,6 +126,11 @@ export class Booking {
     onUpdate: 'CASCADE',
   })
   review: Review;
+
+  @Field(() => BookingOrderCancellation, { nullable: true })
+  @OneToOne(() => BookingOrderCancellation, { cascade: true })
+  @JoinColumn()
+  bookingOrderCancellation: BookingOrderCancellation;
 
   @Column('enum', {
     array: true,

@@ -39,7 +39,8 @@ type MenuItem {
 }
 
 enum MenuItemCategoryPortuguese {
-  BEBIDA
+  BEBIDA_ALCOOLICA
+  BEBIDA_SEM_ALCOOL
   PRATOPRINCIPAL
   SOBREMESA
   ENTRADA
@@ -88,15 +89,41 @@ type Review {
   updatedAt: DateTime!
 }
 
+type BookingOrderCancellation {
+  id: ID!
+  bookingCancelStatus: BookingCancelOrder!
+  booking: Booking
+  price: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum BookingCancelOrder {
+  processing
+  succeeded
+  amount_capturable_updated
+  payment_failed
+}
+
+type WaitList {
+  id: ID!
+  restaurant: Restaurant
+  booking: [Booking!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Booking {
   id: ID!
   extras: String
   specialDate: SpecialDatePortuguese
   bookingStatus: BookingStatusPortuguese!
   user: User
+  waitList: WaitList
   restaurant: Restaurant
   table: [Table!]
   review: Review
+  bookingOrderCancellation: BookingOrderCancellation
   tableCategoryPreferences: [TableCategoryPortuguese!]!
   date: String!
   hour: String!
@@ -168,12 +195,24 @@ enum BrazilianStates {
   TO
 }
 
+type CancellationPolicy {
+  id: ID!
+  restaurant: Restaurant
+  tax: Float!
+  details: String!
+  limitDaysToCancel: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
   dressCode: DressCodePortuguese!
   acceptedPaymentMethods: [PaymentTypesPortuguese!]!
   user: [User!]
+  waitlist: WaitList
+  cancellationPolicy: CancellationPolicy
   restaurantImage: [RestaurantImage!]
   menu: [Menu!]
   booking: [Booking!]
