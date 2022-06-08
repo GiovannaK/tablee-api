@@ -18,7 +18,7 @@ export class BookingService {
     private readonly bookingRepository: Repository<Booking>,
     private readonly restaurantService: RestaurantService,
     private readonly permissionService: PermissionService,
-  ) {}
+  ) { }
 
   async createBooking(
     createBookingInput: CreateBookingInput,
@@ -99,6 +99,16 @@ export class BookingService {
     }
 
     return bookings;
+  }
+
+  async getBookingWithoutRelations(id: string) {
+    const booking = await this.bookingRepository.findOne(id);
+
+    if (!booking) {
+      throw new InternalServerErrorException('Cannot find booking');
+    }
+
+    return booking;
   }
 
   async approveBooking(

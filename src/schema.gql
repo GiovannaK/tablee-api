@@ -16,45 +16,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type RestaurantImage {
-  id: ID!
-  restaurant: Restaurant
-  url: String!
-  key: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type MenuItem {
-  id: ID!
-  menu: Menu
-  category: MenuItemCategoryPortuguese!
-  name: String!
-  description: String!
-  price: Float!
-  url: String!
-  key: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-enum MenuItemCategoryPortuguese {
-  BEBIDA_ALCOOLICA
-  BEBIDA_SEM_ALCOOL
-  PRATOPRINCIPAL
-  SOBREMESA
-  ENTRADA
-}
-
-type Menu {
-  id: ID!
-  restaurant: Restaurant
-  menuItem: [MenuItem!]
-  title: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Table {
   id: ID!
   category: TableCategoryPortuguese!
@@ -81,7 +42,7 @@ enum TableStatusPortuguese {
 
 type Review {
   id: ID!
-  restaurant: Restaurant
+  user: User
   booking: Booking
   rating: Float!
   comment: String!
@@ -103,14 +64,6 @@ enum BookingCancelOrder {
   succeeded
   amount_capturable_updated
   payment_failed
-}
-
-type WaitList {
-  id: ID!
-  restaurant: Restaurant
-  booking: [Booking!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type Booking {
@@ -149,6 +102,71 @@ enum BookingStatusPortuguese {
   PENDENTE
   APROVADA
   REJEITADA
+}
+
+type WaitList {
+  id: ID!
+  restaurant: Restaurant
+  booking: [Booking!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Favorite {
+  id: ID!
+  user: User
+  restaurant: [Restaurant!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CancellationPolicy {
+  id: ID!
+  restaurant: Restaurant
+  tax: Float!
+  details: String!
+  limitDaysToCancel: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RestaurantImage {
+  id: ID!
+  restaurant: Restaurant
+  url: String!
+  key: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type MenuItem {
+  id: ID!
+  menu: Menu
+  category: MenuItemCategoryPortuguese!
+  name: String!
+  description: String!
+  price: Float!
+  url: String!
+  key: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+enum MenuItemCategoryPortuguese {
+  BEBIDA_ALCOOLICA
+  BEBIDA_SEM_ALCOOL
+  PRATOPRINCIPAL
+  SOBREMESA
+  ENTRADA
+}
+
+type Menu {
+  id: ID!
+  restaurant: Restaurant
+  menuItem: [MenuItem!]
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Address {
@@ -195,16 +213,6 @@ enum BrazilianStates {
   TO
 }
 
-type CancellationPolicy {
-  id: ID!
-  restaurant: Restaurant
-  tax: Float!
-  details: String!
-  limitDaysToCancel: Float!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
 type Restaurant {
   id: ID!
   category: RestaurantCategory!
@@ -212,11 +220,11 @@ type Restaurant {
   acceptedPaymentMethods: [PaymentTypesPortuguese!]!
   user: [User!]
   waitlist: WaitList
+  favorite: Favorite
   cancellationPolicy: CancellationPolicy
   restaurantImage: [RestaurantImage!]
   menu: [Menu!]
   booking: [Booking!]
-  review: [Review!]
   address: Address
   name: String!
   cnpj: String!
@@ -297,6 +305,8 @@ type User {
   role: UserRole!
   profile: Profile
   restaurant: [Restaurant!]
+  review: [Review!]
+  favorite: Favorite
   booking: [Booking!]
   firstName: String!
   lastName: String!
@@ -375,6 +385,8 @@ type Query {
   getMenuItem(menuItemId: String!): MenuItem!
   getCurrentUserBookings: [Booking!]!
   getRestaurantBookings(restaurantId: String!): [Booking!]!
+  findAllReviews: [Review!]!
+  findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
 }
 
 type Mutation {
@@ -407,6 +419,7 @@ type Mutation {
   createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
   deleteTablesInBulk(tableIds: [String!]!): Boolean!
+  createReview(data: CreateReviewInput!): Review!
 }
 
 input CreateUserInput {
@@ -601,6 +614,12 @@ input CreateTableInput {
   seats: Float!
   status: String
   restaurantId: String!
+}
+
+input CreateReviewInput {
+  rating: Float!
+  comment: String!
+  bookingId: String!
 }
 
 type Subscription {

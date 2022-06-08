@@ -16,6 +16,7 @@ import { UserRole } from './role/userRole';
 import { Restaurant } from '../../restaurant/entities/restaurant.entity';
 import { Booking } from '../../booking/entities/booking.entity';
 import { Favorite } from '../../favorite/entities/favorite.entity';
+import { Review } from '../../review/entities/review.entity';
 
 @ObjectType()
 @Entity()
@@ -94,6 +95,14 @@ export class User {
   })
   @JoinTable()
   restaurant: Restaurant[];
+
+  @Field(() => [Review], { nullable: true })
+  @OneToMany(() => Review, (review: Review) => review.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  review: Review[];
 
   @Field(() => Favorite, { nullable: true })
   @OneToOne(() => Favorite, { cascade: true })

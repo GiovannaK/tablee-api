@@ -19,7 +19,6 @@ import { Menu } from '../../menu/entities/menu.entity';
 import { Booking } from '../../booking/entities/booking.entity';
 import { DressCodePortuguese } from './enums/dressCode.enum';
 import { PaymentTypesPortuguese } from './enums/payment.enum';
-import { Review } from '../../review/entities/review.entity';
 import { CancellationPolicy } from 'src/cancellation/entities/cancellation.entity';
 import { WaitList } from '../../waitlist/entities/waitList.entity';
 import { Favorite } from '../../favorite/entities/favorite.entity';
@@ -201,14 +200,6 @@ export class Restaurant {
     onUpdate: 'CASCADE',
   })
   booking: Booking[];
-
-  @Field(() => [Review], { nullable: true })
-  @OneToMany(() => Review, (review: Review) => review.restaurant, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  review: Review[];
 
   @Field(() => Address, { nullable: true })
   @OneToOne(() => Address, { cascade: true })

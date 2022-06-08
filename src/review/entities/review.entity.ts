@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Restaurant } from '../../restaurant/entities/restaurant.entity';
+import { User } from '../../user/entities/user.entity';
 
 @ObjectType()
 @Entity()
@@ -31,11 +31,11 @@ export class Review {
   })
   comment: string;
 
-  @Field(() => Restaurant, { nullable: true })
-  @ManyToOne(() => Restaurant, (restaurant: Restaurant) => restaurant.booking, {
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user: User) => user.review, {
     onDelete: 'CASCADE',
   })
-  restaurant: Restaurant;
+  user: User;
 
   @Field(() => Booking, { nullable: true })
   @OneToOne(() => Booking, { cascade: true })
