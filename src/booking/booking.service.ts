@@ -206,4 +206,14 @@ export class BookingService {
 
     return booking;
   }
+
+  async getBookingsByUser(currentUser: User) {
+    const bookings = await this.bookingRepository
+      .createQueryBuilder('booking')
+      .innerJoinAndSelect('booking.user', 'user')
+      .where('user.id = :userId', { userId: currentUser.id })
+      .getMany();
+
+    return bookings;
+  }
 }

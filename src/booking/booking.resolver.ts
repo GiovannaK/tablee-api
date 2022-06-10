@@ -138,4 +138,12 @@ export class BookingResolver {
     );
     return bookings;
   }
+
+  @Roles(UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Booking])
+  async getRestaurantBookingsByUser(@CurrentUser() currentUser: User) {
+    const bookings = await this.bookingService.getBookingsByUser(currentUser);
+    return bookings;
+  }
 }

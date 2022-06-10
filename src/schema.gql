@@ -389,6 +389,7 @@ type Query {
   getCurrentUserBookings: [Booking!]!
   getRestaurantBookings(restaurantId: String!): [Booking!]!
   getRestaurantBookingsByStatus(restaurantId: String!, status: String!): [Booking!]!
+  getRestaurantBookingsByUser: [Booking!]!
   tablesByRestaurant(restaurantId: String!): [Table!]!
   findAllReviews: [Review!]!
   findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
