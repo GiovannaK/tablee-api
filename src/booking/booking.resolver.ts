@@ -13,6 +13,7 @@ import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { CreateBookingInput } from './dto/create-booking.input';
 import { User } from '../user/entities/user.entity';
 import { BookingUserRestaurant } from './dto/booking-user-restaurant.input';
+import { BookingStatusPortuguese } from './entities/enums/bookingStatus.enum';
 
 const BOOKING_ADDED_EVENT = 'bookingAdded';
 const BOOKING_APPROVED_EVENT = 'bookingApproved';
@@ -120,5 +121,21 @@ export class BookingResolver {
       restaurantId,
     );
     return booking;
+  }
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Booking])
+  async getRestaurantBookingsByStatus(
+    @Args('restaurantId') restaurantId: string,
+    @Args('status') status: BookingStatusPortuguese,
+    @CurrentUser() currentUser: User,
+  ) {
+    const bookings = await this.bookingService.getBookingByStatusForRestaurant(
+      status,
+      restaurantId,
+      currentUser,
+    );
+    return bookings;
   }
 }

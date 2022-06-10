@@ -30,6 +30,7 @@ import { CancellationModule } from './cancellation/cancellation.module';
 import { CancellationorderModule } from './cancellationorder/cancellationorder.module';
 import { WaitlistModule } from './waitlist/waitlist.module';
 import { FavoriteModule } from './favorite/favorite.module';
+import { BookingtableModule } from './bookingtable/bookingtable.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -82,6 +83,7 @@ import * as Joi from '@hapi/joi';
     CancellationorderModule,
     WaitlistModule,
     FavoriteModule,
+    BookingtableModule,
   ],
   controllers: [AppController],
   providers: [AppService],

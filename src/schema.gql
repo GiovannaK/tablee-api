@@ -102,6 +102,9 @@ enum BookingStatusPortuguese {
   PENDENTE
   APROVADA
   REJEITADA
+  FINALIZADA
+  CANCELADA
+  TRANSCORRENDO
 }
 
 type WaitList {
@@ -385,6 +388,8 @@ type Query {
   getMenuItem(menuItemId: String!): MenuItem!
   getCurrentUserBookings: [Booking!]!
   getRestaurantBookings(restaurantId: String!): [Booking!]!
+  getRestaurantBookingsByStatus(restaurantId: String!, status: String!): [Booking!]!
+  tablesByRestaurant(restaurantId: String!): [Table!]!
   findAllReviews: [Review!]!
   findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
 }
@@ -419,7 +424,9 @@ type Mutation {
   createMultipleTables(data: CreateTableInput!, quantity: Float!, initialTableNumber: Float!): [Table!]!
   deleteTable(tableId: String!): Boolean!
   deleteTablesInBulk(tableIds: [String!]!): Boolean!
+  assignTable(tableId: String!, bookingId: String!): Table!
   createReview(data: CreateReviewInput!): Review!
+  finishBooking(bookingId: String!, restaurantId: String!): Booking!
 }
 
 input CreateUserInput {

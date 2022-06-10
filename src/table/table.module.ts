@@ -5,6 +5,7 @@ import { RestaurantModule } from '../restaurant/restaurant.module';
 import { PermissionModule } from '../permission/permission.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Table } from './entities/table.entity';
+import { BookingModule } from '../booking/booking.module';
 
 @Module({
   providers: [TableService, TableResolver],
@@ -12,6 +13,7 @@ import { Table } from './entities/table.entity';
   imports: [
     RestaurantModule,
     PermissionModule,
+    BookingModule,
     TypeOrmModule.forFeature([Table]),
   ],
 })

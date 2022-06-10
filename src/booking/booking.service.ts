@@ -18,7 +18,7 @@ export class BookingService {
     private readonly bookingRepository: Repository<Booking>,
     private readonly restaurantService: RestaurantService,
     private readonly permissionService: PermissionService,
-  ) { }
+  ) {}
 
   async createBooking(
     createBookingInput: CreateBookingInput,
@@ -55,7 +55,7 @@ export class BookingService {
 
   async getBookingByIdWithAllRelations(id: string) {
     const booking = await this.bookingRepository.findOne(id, {
-      relations: ['user', 'restaurant'],
+      relations: ['user', 'restaurant', 'table'],
     });
 
     if (!booking) {
@@ -67,6 +67,18 @@ export class BookingService {
       user: booking.user,
       restaurant: booking.restaurant,
     };
+  }
+
+  async getBookingWithRelations(id: string, relations: string[]) {
+    const booking = await this.bookingRepository.findOne(id, {
+      relations,
+    });
+
+    if (!booking) {
+      throw new InternalServerErrorException('Cannot find booking');
+    }
+
+    return booking;
   }
 
   async getCurrentUserBookings(currentUser: User) {
@@ -154,7 +166,7 @@ export class BookingService {
 
     const findBooking = await this.getBookingByIdWithAllRelations(bookingId);
 
-    await this.bookingRepository
+    const updateBookingStatus = await this.bookingRepository
       .createQueryBuilder()
       .update(Booking)
       .set({
@@ -165,9 +177,33 @@ export class BookingService {
       .updateEntity(true)
       .execute();
 
+    if (!updateBookingStatus.affected) {
+      throw new InternalServerErrorException('Cannot update booking');
+    }
+
     const findBookingUpdatedBooking = await this.getBookingByIdWithAllRelations(
       bookingId,
     );
     return findBookingUpdatedBooking;
+  }
+
+  async getBookingByStatusForRestaurant(
+    status: BookingStatusPortuguese,
+    restaurantId: string,
+    currentUser: User,
+  ) {
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      restaurantId,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+    const booking = await this.bookingRepository
+      .createQueryBuilder('booking')
+      .innerJoinAndSelect('booking.restaurant', 'restaurant')
+      .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('booking.bookingStatus = :status', { status })
+      .getMany();
+
+    return booking;
   }
 }

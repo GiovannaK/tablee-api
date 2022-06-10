@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { TableService } from './table.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/role.guard';
@@ -66,5 +66,35 @@ export class TableResolver {
       currentUser,
     );
     return table;
+  }
+
+  @Roles(UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => Table)
+  async assignTable(
+    @Args('tableId') tableId: string,
+    @Args('bookingId') bookingId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const table = await this.tableService.assignTableToBooking(
+      tableId,
+      currentUser,
+      bookingId,
+    );
+    return table;
+  }
+
+  @Roles(UserRole.EMPLOYEE, UserRole.MANAGER, UserRole.OWNER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Table])
+  async tablesByRestaurant(
+    @Args('restaurantId') restaurantId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    const tables = await this.tableService.findTablesByRestaurant(
+      restaurantId,
+      currentUser,
+    );
+    return tables;
   }
 }
