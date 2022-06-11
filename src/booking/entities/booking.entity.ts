@@ -73,7 +73,7 @@ export class Booking {
   hasArrived: boolean;
 
   @Column({
-    nullable: false,
+    nullable: true,
     length: 8,
   })
   code: string;

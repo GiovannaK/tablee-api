@@ -14,6 +14,7 @@ import { CreateBookingInput } from './dto/create-booking.input';
 import { User } from '../user/entities/user.entity';
 import { BookingUserRestaurant } from './dto/booking-user-restaurant.input';
 import { BookingStatusPortuguese } from './entities/enums/bookingStatus.enum';
+import { BookingOngoingInput } from './dto/booking-ongoing.input';
 
 const BOOKING_ADDED_EVENT = 'bookingAdded';
 const BOOKING_APPROVED_EVENT = 'bookingApproved';
@@ -145,5 +146,16 @@ export class BookingResolver {
   async getRestaurantBookingsByUser(@CurrentUser() currentUser: User) {
     const bookings = await this.bookingService.getBookingsByUser(currentUser);
     return bookings;
+  }
+
+  @Roles(UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Mutation(() => Booking)
+  async bookingOnGoing(
+    @Args('data') data: BookingOngoingInput,
+    @CurrentUser() currentUser: User,
+  ) {
+    const booking = await this.bookingService.onGoingBooking(currentUser, data);
+    return booking;
   }
 }

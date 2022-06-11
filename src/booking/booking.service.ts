@@ -9,6 +9,7 @@ import { RestaurantService } from '../restaurant/restaurant.service';
 import { PermissionService } from '../permission/permission.service';
 import { UserRole } from 'src/user/entities/role/userRole';
 import { BookingStatusPortuguese } from './entities/enums/bookingStatus.enum';
+import { BookingOngoingInput } from './dto/booking-ongoing.input';
 const crypto = require('crypto');
 
 @Injectable()
@@ -32,7 +33,6 @@ export class BookingService {
       ...createBookingInput,
       restaurant,
       user: currentUser,
-      code: this.generateCode(),
     });
 
     const createdBooking = await this.bookingRepository.save(createBooking);
@@ -49,7 +49,7 @@ export class BookingService {
   }
 
   generateCode() {
-    const code = crypto.randomBytes(3).toString('hex');
+    const code = crypto.randomBytes(4).toString('hex');
     return code;
   }
 
@@ -141,6 +141,7 @@ export class BookingService {
       .update(Booking)
       .set({
         bookingStatus: BookingStatusPortuguese.APROVADA,
+        code: this.generateCode(),
       })
       .where('id = :bookingId', { bookingId: findBooking.booking.id })
       .returning('*')
@@ -215,5 +216,68 @@ export class BookingService {
       .getMany();
 
     return bookings;
+  }
+
+  async onGoingBooking(
+    currentUser: User,
+    bookingOngoingInput: BookingOngoingInput,
+  ) {
+    const booking = await this.getBookingWithRelations(
+      bookingOngoingInput.bookingId,
+      ['restaurant'],
+    );
+
+    await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
+      currentUser.id,
+      booking.restaurant.id,
+      [UserRole.OWNER, UserRole.MANAGER, UserRole.EMPLOYEE],
+    );
+
+    await this.compareBookingStatus(
+      booking.id,
+      BookingStatusPortuguese.APROVADA,
+    );
+
+    await this.validateCode(booking.code, bookingOngoingInput.code);
+
+    const updateBookingStatus = await this.bookingRepository
+      .createQueryBuilder()
+      .update(Booking)
+      .set({
+        bookingStatus: BookingStatusPortuguese.TRANSCORRENDO,
+        code: null,
+      })
+      .where('id = :bookingId', { bookingId: booking.id })
+      .returning('*')
+      .updateEntity(true)
+      .execute();
+
+    if (!updateBookingStatus.affected) {
+      throw new InternalServerErrorException(
+        'Cannot update booking status and code',
+      );
+    }
+
+    return updateBookingStatus.raw[0];
+  }
+
+  async validateCode(bookingCode: string, inputCode: string) {
+    if (bookingCode === inputCode) {
+      return;
+    }
+    throw new InternalServerErrorException('Code is invalid');
+  }
+
+  async compareBookingStatus(
+    bookingId: string,
+    status: BookingStatusPortuguese,
+  ) {
+    const booking = await this.getBookingByIdWithAllRelations(bookingId);
+
+    if (booking.booking.bookingStatus !== status) {
+      throw new InternalServerErrorException('Booking status is invalid');
+    }
+
+    return booking;
   }
 }
