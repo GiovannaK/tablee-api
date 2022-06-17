@@ -5,7 +5,8 @@ import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { EmailService } from '../email/email.service';
 import { CreateOwnerInput } from './dto/create-owner.input';
-import { UserRole } from 'src/user/entities/role/userRole';
+import { UserRole } from '../user/entities/role/userRole';
+import { AppService } from '../app.service';
 
 @Injectable()
 export class OwnerService {
@@ -13,7 +14,7 @@ export class OwnerService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
-    private readonly emailService: EmailService,
+    private readonly appService: AppService,
   ) {}
 
   async createOwner(createUserInput: CreateOwnerInput) {
@@ -42,7 +43,7 @@ export class OwnerService {
       ${process.env.CLIENT_URL}/auth/${createdUser.loginToken}
     `;
 
-    await this.emailService.sendMail(createdUser.email, subject, text);
+    await this.appService.sendMail(createdUser.email, subject, text);
 
     return createdUser;
   }

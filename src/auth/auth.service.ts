@@ -8,8 +8,8 @@ import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { EmailService } from '../email/email.service';
 import { SigninInput } from './signin.dto';
+import { AppService } from '../app.service';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly emailService: EmailService,
+    private readonly appService: AppService,
   ) {}
 
   async verifyTokenExpiration(expirationLoginToken: string) {
@@ -55,7 +55,7 @@ export class AuthService {
       ${process.env.CLIENT_URL}/auth/${updatedUser.loginToken}
     `;
 
-    await this.emailService.sendMail(user.email, subject, text);
+    await this.appService.sendMail(user.email, subject, text);
     return updatedUser;
   }
 

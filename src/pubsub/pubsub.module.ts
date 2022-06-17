@@ -14,7 +14,7 @@ export const PUB_SUB = 'PUB_SUB';
             port: parseInt(process.env.REDIS_PORT),
             username: process.env.REDIS_USERNAME,
             password: process.env.REDIS_PASSWORD,
-            db: process.env.REDIS_NAME,
+            name: process.env.REDIS_NAME,
             lazyConnect: true,
             connectTimeout: 10000,
             maxRetriesPerRequest: 3,

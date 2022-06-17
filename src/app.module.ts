@@ -1,5 +1,4 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { Global, Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,7 +6,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
-import { EmailModule } from './email/email.module';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
@@ -32,9 +30,25 @@ import { WaitlistModule } from './waitlist/waitlist.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { BookingtableModule } from './bookingtable/bookingtable.module';
 import * as Joi from '@hapi/joi';
-
+import { BullModule, InjectQueue } from '@nestjs/bull';
+import { SendMailsConsumer } from './sendMails-consumer.service';
+import { MiddlewareBuilder } from '@nestjs/core';
+import { Queue } from 'bull';
+import { createBullBoard } from 'bull-board';
+import { BullAdapter } from 'bull-board/bullAdapter';
+@Global()
 @Module({
+  providers: [AppService, SendMailsConsumer],
   imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      context: ({ req, res }) => ({ req, res }),
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
+    }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
@@ -47,21 +61,30 @@ import * as Joi from '@hapi/joi';
         AWS_SECRET_ACCESS_KEY: Joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRoot(),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      context: ({ req, res }) => ({ req, res }),
-      subscriptions: {
-        'graphql-ws': true,
-        'subscriptions-transport-ws': true,
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_QUEUE_HOST,
+        port: Number(process.env.REDIS_QUEUE_PORT),
+        password: process.env.REDIS_QUEUE_PASSWORD,
+        username: process.env.REDIS_QUEUE_USERNAME,
+        name: process.env.REDIS_QUEUE_NAME,
+        lazyConnect: true,
+        connectTimeout: 10000,
+        maxRetriesPerRequest: 3,
+      },
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: true,
       },
     }),
-    UserModule,
-    EmailModule,
+    BullModule.registerQueue({
+      name: 'email-send',
+    }),
+    TypeOrmModule.forRoot(),
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_SECRET_KEY,
     }),
+    UserModule,
     AuthModule,
     FileModule,
     ProfileModule,
@@ -85,7 +108,13 @@ import * as Joi from '@hapi/joi';
     FavoriteModule,
     BookingtableModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  exports: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(@InjectQueue('email-send') private sendMailQueue: Queue) {}
+
+  configure(consumer: MiddlewareBuilder) {
+    const { router } = createBullBoard([new BullAdapter(this.sendMailQueue)]);
+    consumer.apply(router).forRoutes('/admin/queues');
+  }
+}

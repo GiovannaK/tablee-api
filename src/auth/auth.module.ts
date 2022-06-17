@@ -8,7 +8,6 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtStrategy } from './jwt.strategy';
 import { RolesGuard } from './role.guard';
 import { UserModule } from '../user/user.module';
-import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { EmailModule } from '../email/email.module';
       }),
     }),
     UserModule,
-    EmailModule,
   ],
   providers: [AuthService, AuthResolver, JwtAuthGuard, JwtStrategy, RolesGuard],
   exports: [AuthService, JwtAuthGuard, RolesGuard],

@@ -12,6 +12,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.Input';
 import { StripeService } from '../stripe/stripe.service';
 import { UpdateUserInput } from './dto/update-user.input';
+import { AppService } from '../app.service';
 const crypto = require('crypto');
 
 @Injectable()
@@ -19,7 +20,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly emailService: EmailService,
+    private readonly appService: AppService,
     private readonly stripeService: StripeService,
   ) {}
 
@@ -79,7 +80,7 @@ export class UserService {
       ${process.env.CLIENT_URL}/auth/${createdUser.loginToken}
     `;
 
-    await this.emailService.sendMail(createdUser.email, subject, text);
+    await this.appService.sendMail(createdUser.email, subject, text);
 
     return createdUser;
   }
