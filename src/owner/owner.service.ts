@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
-import { EmailService } from '../email/email.service';
 import { CreateOwnerInput } from './dto/create-owner.input';
 import { UserRole } from '../user/entities/role/userRole';
 import { AppService } from '../app.service';
