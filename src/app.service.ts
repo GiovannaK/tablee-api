@@ -18,15 +18,22 @@ export class AppService {
       text,
     });
   }
+
+  // sendMailSendgrid = async (to: string, subject: string, text: string) => {
+  //   const sendMail = await this.sendGrid.send({
+  //     to,
+  //     from: process.env.SENDGRID_EMAIL_HOST,
+  //     subject,
+  //     text,
+  //   });
+  //   console.log('sendMail', sendMail);
+  //   return sendMail;
+  // };
   // async sendMail(to: string, subject: string, text: string) {
-  //   try {
-  //     await this.queue.add(
-  //       'email-job',
-  //       { to, subject, text },
-  //       { attempts: 2, delay: 1000 },
-  //     );
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
+  //   await this.queue.add('email-job', { to, subject, text });
+  //   await this.queue.process(async (job, done) => {
+  //     await this.sendMail(job.data.to, job.data.subject, job.data.text);
+  //     done();
+  //   });
   // }
 }

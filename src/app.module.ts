@@ -31,14 +31,13 @@ import { FavoriteModule } from './favorite/favorite.module';
 import { BookingtableModule } from './bookingtable/bookingtable.module';
 import * as Joi from '@hapi/joi';
 import { BullModule, InjectQueue } from '@nestjs/bull';
-import { SendMailsConsumer } from './sendMails-consumer.service';
 import { MiddlewareBuilder } from '@nestjs/core';
 import { Queue } from 'bull';
 import { createBullBoard } from 'bull-board';
 import { BullAdapter } from 'bull-board/bullAdapter';
 @Global()
 @Module({
-  providers: [AppService, SendMailsConsumer],
+  providers: [AppService],
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -71,10 +70,6 @@ import { BullAdapter } from 'bull-board/bullAdapter';
         lazyConnect: true,
         connectTimeout: 10000,
         maxRetriesPerRequest: 3,
-      },
-      defaultJobOptions: {
-        removeOnComplete: true,
-        removeOnFail: true,
       },
     }),
     BullModule.registerQueue({

@@ -347,6 +347,11 @@ type AuthType {
   loginToken: String!
 }
 
+type RestaurantsAndCount {
+  restaurants: [Restaurant!]!
+  count: Float!
+}
+
 type UsersRestaurant {
   users: [User!]!
   count: Float!
@@ -380,6 +385,7 @@ type Query {
   createLoginLink(id: String!): StripeCreateLoginLink!
   getRestaurantById(id: String!): Restaurant!
   getUsersFromRestaurant(restaurantId: String!): UsersRestaurant!
+  listAllRestaurants(relations: [String!]!): RestaurantsAndCount!
   getUsersFromRole(restaurantId: String!, roles: [UserRole!]!): UsersRestaurant!
   listManagersByRestaurant(restaurantId: String!): [User!]!
   listEmployeesByRestaurant(restaurantId: String!): [User!]!

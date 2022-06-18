@@ -190,4 +190,14 @@ export class RestaurantService {
       count: getUsers[1],
     };
   }
+
+  async listAllrestaurantsWithCountAndRelations(relations: string[]) {
+    const restaurants = await this.restaurantRepository.findAndCount({
+      relations: [...relations],
+    });
+    return {
+      restaurants: restaurants[0],
+      count: restaurants[1],
+    };
+  }
 }

@@ -12,7 +12,7 @@ import { User } from '../user/entities/user.entity';
 
 @Resolver()
 export class ReviewResolver {
-  constructor(private readonly reviewService: ReviewService) { }
+  constructor(private readonly reviewService: ReviewService) {}
 
   @Roles(UserRole.USER)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -25,7 +25,6 @@ export class ReviewResolver {
     return review;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => [Review])
   async findAllReviews(@CurrentUser() currentUser: User) {
     const reviews = await this.reviewService.getReviewsByCurrentUser(
@@ -34,7 +33,6 @@ export class ReviewResolver {
     return reviews;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => [Review])
   async findAllReviewsByRestaurant(@Args('restaurantId') restaurantId: string) {
     const reviews = await this.reviewService.getReviewsByRestaurant(

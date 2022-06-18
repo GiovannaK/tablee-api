@@ -7,6 +7,7 @@ import { CurrentUser } from '../user/decorators/currentUser.decorator';
 import { UserRole } from '../user/entities/role/userRole';
 import { User } from '../user/entities/user.entity';
 import { CreateRestaurantInput } from './dto/create-restaurant.input';
+import { RestaurantsAndCount } from './dto/restaurants-count';
 import { UpdateRestaurantInput } from './dto/update-restaurant.input';
 import { UsersRestaurant } from './dto/users-restaurant';
 import { Restaurant } from './entities/restaurant.entity';
@@ -44,6 +45,17 @@ export class RestaurantResolver {
       restaurantId,
     );
     return restaurant;
+  }
+
+  @Query(() => RestaurantsAndCount)
+  async listAllRestaurants(
+    @Args({ name: 'relations', type: () => [String] }) relations: string[],
+  ) {
+    const restaurants =
+      await this.restaurantService.listAllrestaurantsWithCountAndRelations(
+        relations,
+      );
+    return restaurants;
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
