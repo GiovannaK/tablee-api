@@ -9,6 +9,7 @@ import { PermissionService } from '../permission/permission.service';
 import { UpdateRestaurantInput } from '../restaurant/dto/update-restaurant.input';
 import { UserRole } from '../user/entities/role/userRole';
 import { FileService } from '../file/file.service';
+import { AvaliabilitySearch } from '../avaliability/dto/avaliability.dto';
 
 @Injectable()
 export class RestaurantService {

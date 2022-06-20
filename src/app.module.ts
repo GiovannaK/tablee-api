@@ -35,6 +35,7 @@ import { MiddlewareBuilder } from '@nestjs/core';
 import { Queue } from 'bull';
 import { createBullBoard } from 'bull-board';
 import { BullAdapter } from 'bull-board/bullAdapter';
+import { AvaliabilityModule } from './avaliability/avaliability.module';
 @Global()
 @Module({
   providers: [AppService],
@@ -102,6 +103,7 @@ import { BullAdapter } from 'bull-board/bullAdapter';
     WaitlistModule,
     FavoriteModule,
     BookingtableModule,
+    AvaliabilityModule,
   ],
   exports: [AppService],
 })

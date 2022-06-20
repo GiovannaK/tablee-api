@@ -37,6 +37,10 @@ export class CreateRestaurantInput {
   @IsNotEmpty()
   category: RestaurantCategory;
 
+  @IsInt()
+  @IsNotEmpty()
+  maxGuestQuantity: number;
+
   @IsBoolean()
   @IsNotEmpty()
   isWifi: boolean;
@@ -82,6 +86,24 @@ export class CreateRestaurantInput {
 
   @IsOptional()
   dinner_end_hour: string;
+
+  @IsOptional()
+  brunch_start_hour_weekend: string;
+
+  @IsOptional()
+  brunch_end_hour_weekend: string;
+
+  @IsOptional()
+  lunch_start_hour_weekend: string;
+
+  @IsOptional()
+  lunch_end_hour_weekend: string;
+
+  @IsOptional()
+  dinner_start_hour_weekend: string;
+
+  @IsOptional()
+  dinner_end_hour_weekend: string;
 
   @IsNotEmpty()
   isAvailableForBrunch: boolean;

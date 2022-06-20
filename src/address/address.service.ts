@@ -1,11 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { User } from '../user/entities/user.entity';
 import { CreateAddressInput } from './dto/create-address.input';
-import { Restaurant } from '../restaurant/entities/restaurant.entity';
 import { PermissionService } from '../permission/permission.service';
 import { RestaurantService } from '../restaurant/restaurant.service';
 import { UserRole } from '../user/entities/role/userRole';
@@ -17,9 +15,6 @@ export class AddressService {
   constructor(
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
-    @InjectRepository(Restaurant)
-    private readonly restaurantRepository: Repository<Restaurant>,
-    private readonly userService: UserService,
     private readonly permissionService: PermissionService,
     private readonly restaurantService: RestaurantService,
   ) {}

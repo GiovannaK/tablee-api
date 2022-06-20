@@ -248,11 +248,18 @@ type Restaurant {
   lunch_end_hour: String!
   dinner_start_hour: String!
   dinner_end_hour: String!
+  brunch_start_hour_weekend: String!
+  brunch_end_hour_weekend: String!
+  lunch_start_hour_weekend: String!
+  lunch_end_hour_weekend: String!
+  dinner_start_hour_weekend: String!
+  dinner_end_hour_weekend: String!
   isAvailableForBrunch: Boolean!
   isAvailableForLunch: Boolean!
   isAvailableForDinner: Boolean!
   stripeAccountId: String
   thumbUrl: String!
+  maxGuestQuantity: Float!
   thumbKey: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -399,6 +406,7 @@ type Query {
   tablesByRestaurant(restaurantId: String!): [Table!]!
   findAllReviews: [Review!]!
   findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
+  findPolicyByRestaurant(restaurantId: String!): CancellationPolicy!
 }
 
 type Mutation {
@@ -434,6 +442,8 @@ type Mutation {
   deleteTablesInBulk(tableIds: [String!]!): Boolean!
   assignTable(tableId: String!, bookingId: String!): Table!
   createReview(data: CreateReviewInput!): Review!
+  createPolicy(data: CreatePolicyInput!): CancellationPolicy!
+  updatePolicy(data: UpdatePolicyInput!): CancellationPolicy!
   finishBooking(bookingId: String!, restaurantId: String!): Booking!
 }
 
@@ -480,6 +490,7 @@ input CreateRestaurantInput {
   mainPhone: String!
   secondaryPhone: String
   category: RestaurantCategory!
+  maxGuestQuantity: Float!
   isWifi: Boolean!
   isParking: Boolean!
   isOpen: Boolean!
@@ -494,6 +505,12 @@ input CreateRestaurantInput {
   lunch_end_hour: String!
   dinner_start_hour: String!
   dinner_end_hour: String!
+  brunch_start_hour_weekend: String!
+  brunch_end_hour_weekend: String!
+  lunch_start_hour_weekend: String!
+  lunch_end_hour_weekend: String!
+  dinner_start_hour_weekend: String!
+  dinner_end_hour_weekend: String!
   isAvailableForBrunch: Boolean!
   isAvailableForLunch: Boolean!
   isAvailableForDinner: Boolean!
@@ -503,6 +520,7 @@ input UpdateRestaurantInput {
   name: String
   email: String
   cnpj: String
+  maxGuestQuantity: Float
   mainPhone: String
   secondaryPhone: String
   category: RestaurantCategory
@@ -520,6 +538,12 @@ input UpdateRestaurantInput {
   lunch_end_hour: String
   dinner_start_hour: String
   dinner_end_hour: String
+  brunch_start_hour_weekend: String
+  brunch_end_hour_weekend: String
+  lunch_start_hour_weekend: String
+  lunch_end_hour_weekend: String
+  dinner_start_hour_weekend: String
+  dinner_end_hour_weekend: String
   isAvailableForBrunch: Boolean
   isAvailableForLunch: Boolean
   isAvailableForDinner: Boolean
@@ -640,6 +664,21 @@ input CreateReviewInput {
   rating: Float!
   comment: String!
   bookingId: String!
+}
+
+input CreatePolicyInput {
+  restaurantId: String!
+  tax: Float!
+  details: String!
+  limitDaysToCancel: Float!
+}
+
+input UpdatePolicyInput {
+  restaurantId: String!
+  id: String!
+  tax: Float
+  details: String
+  limitDaysToCancel: Float
 }
 
 type Subscription {

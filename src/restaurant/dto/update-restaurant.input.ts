@@ -30,6 +30,11 @@ export class UpdateRestaurantInput {
 
   @IsOptional()
   @Field()
+  @IsInt()
+  maxGuestQuantity?: number;
+
+  @IsOptional()
+  @Field()
   @Length(10, 11)
   mainPhone?: string;
 
@@ -96,6 +101,24 @@ export class UpdateRestaurantInput {
 
   @IsOptional()
   dinner_end_hour?: string;
+
+  @IsOptional()
+  brunch_start_hour_weekend?: string;
+
+  @IsOptional()
+  brunch_end_hour_weekend?: string;
+
+  @IsOptional()
+  lunch_start_hour_weekend?: string;
+
+  @IsOptional()
+  lunch_end_hour_weekend?: string;
+
+  @IsOptional()
+  dinner_start_hour_weekend?: string;
+
+  @IsOptional()
+  dinner_end_hour_weekend?: string;
 
   @IsOptional()
   @IsNotEmpty()

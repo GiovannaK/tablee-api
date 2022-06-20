@@ -127,6 +127,24 @@ export class Restaurant {
   @Column({ type: 'time', nullable: true })
   dinner_end_hour: string;
 
+  @Column({ type: 'time', nullable: true })
+  brunch_start_hour_weekend: string;
+
+  @Column({ type: 'time', nullable: true })
+  brunch_end_hour_weekend: string;
+
+  @Column({ type: 'time', nullable: true })
+  lunch_start_hour_weekend: string;
+
+  @Column({ type: 'time', nullable: true })
+  lunch_end_hour_weekend: string;
+
+  @Column({ type: 'time', nullable: true })
+  dinner_start_hour_weekend: string;
+
+  @Column({ type: 'time', nullable: true })
+  dinner_end_hour_weekend: string;
+
   @Column({ default: true })
   isAvailableForBrunch: boolean;
 
@@ -145,6 +163,12 @@ export class Restaurant {
     nullable: true,
   })
   thumbUrl: string;
+
+  @Column({
+    nullable: false,
+    type: 'integer',
+  })
+  maxGuestQuantity: number;
 
   @Column({
     nullable: true,
@@ -202,7 +226,11 @@ export class Restaurant {
   booking: Booking[];
 
   @Field(() => Address, { nullable: true })
-  @OneToOne(() => Address, { cascade: true })
+  @OneToOne(() => Address, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn()
   address: Address;
 
