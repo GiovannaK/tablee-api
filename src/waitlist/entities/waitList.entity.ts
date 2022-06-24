@@ -28,8 +28,9 @@ export class WaitList {
     cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    nullable: true,
   })
-  booking: Booking[];
+  booking?: Booking[];
 
   @CreateDateColumn()
   createdAt: Date;

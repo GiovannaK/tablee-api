@@ -24,6 +24,7 @@ export class BookingService {
   async createBooking(
     createBookingInput: CreateBookingInput,
     currentUser: User,
+    createdByWaitList: boolean,
   ) {
     const restaurant =
       await this.restaurantService.getRestaurantByIdNoRelations(
@@ -33,6 +34,7 @@ export class BookingService {
       ...createBookingInput,
       restaurant,
       user: currentUser,
+      createdByWaitList,
     });
 
     const createdBooking = await this.bookingRepository.save(createBooking);

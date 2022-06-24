@@ -61,7 +61,12 @@ export class BookingResolver {
     @Args('data') data: CreateBookingInput,
     @CurrentUser() currentUser: User,
   ) {
-    const booking = await this.bookingService.createBooking(data, currentUser);
+    const createdByWaitList = false;
+    const booking = await this.bookingService.createBooking(
+      data,
+      currentUser,
+      createdByWaitList,
+    );
     this.pubSub.publish(BOOKING_ADDED_EVENT, { bookingAdded: booking });
     return booking;
   }

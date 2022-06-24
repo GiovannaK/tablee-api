@@ -17,7 +17,7 @@ services:
       context: .
     ports:
       - ${PORT}:4000
-    command: npm run start:debug
+    command: npm run start:dev
     volumes:
       - .:/usr/src/app
     environment:

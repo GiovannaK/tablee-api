@@ -407,6 +407,7 @@ type Query {
   findAllReviews: [Review!]!
   findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
   findPolicyByRestaurant(restaurantId: String!): CancellationPolicy!
+  getWaitListWithBookings(restaurantId: String!): WaitList!
 }
 
 type Mutation {
@@ -444,6 +445,8 @@ type Mutation {
   createReview(data: CreateReviewInput!): Review!
   createPolicy(data: CreatePolicyInput!): CancellationPolicy!
   updatePolicy(data: UpdatePolicyInput!): CancellationPolicy!
+  createWaitListForRestaurant(restaurantId: String!): Boolean!
+  createBookingByWaitList(bookingInput: CreateBookingInput!): BookingUserRestaurant!
   finishBooking(bookingId: String!, restaurantId: String!): Booking!
 }
 
@@ -685,4 +688,5 @@ type Subscription {
   bookingAdded(restaurantId: String!): BookingUserRestaurant!
   bookingApproved(restaurantId: String!): BookingUserRestaurant!
   bookingReject(restaurantId: String!): BookingUserRestaurant!
+  waitListAdded(restaurantId: String!): BookingUserRestaurant!
 }
