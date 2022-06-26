@@ -35,11 +35,15 @@ export class WaitlistService {
       createBookingInput.restaurantId,
     );
 
+    await this.bookingService.addBookingToWaitList(
+      getWaitList,
+      bookingByWaitList.booking,
+    );
+
     return bookingByWaitList;
   }
 
   async createWaitList(currentUser: User, restaurantId: string) {
-    console.log('HEEERE');
     await this.permissionService.hasMultiplePermissionRequiredForRestaurant(
       currentUser.id,
       restaurantId,

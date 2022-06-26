@@ -10,6 +10,7 @@ import { PermissionService } from '../permission/permission.service';
 import { UserRole } from 'src/user/entities/role/userRole';
 import { BookingStatusPortuguese } from './entities/enums/bookingStatus.enum';
 import { BookingOngoingInput } from './dto/booking-ongoing.input';
+import { WaitList } from 'src/waitlist/entities/waitList.entity';
 const crypto = require('crypto');
 
 @Injectable()
@@ -281,5 +282,17 @@ export class BookingService {
     }
 
     return booking;
+  }
+
+  async addBookingToWaitList(waitList: WaitList, booking: Booking) {
+    const addBookingToList = await this.bookingRepository.save({
+      ...booking,
+      waitList,
+    });
+    if (!addBookingToList) {
+      throw new InternalServerErrorException('Cannot add booking to wait list');
+    }
+
+    return addBookingToList;
   }
 }
