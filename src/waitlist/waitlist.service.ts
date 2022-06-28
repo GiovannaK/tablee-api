@@ -78,6 +78,7 @@ export class WaitlistService {
       .leftJoinAndSelect('waitList.restaurant', 'restaurant')
       .leftJoinAndSelect('waitList.booking', 'booking')
       .where('restaurant.id = :restaurantId', { restaurantId })
+      .andWhere('booking.createdByWaitList = true')
       .getOne();
 
     if (!waitList) {

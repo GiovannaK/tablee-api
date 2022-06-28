@@ -7,6 +7,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -104,10 +105,12 @@ export class User {
   })
   review: Review[];
 
-  @Field(() => Favorite, { nullable: true })
-  @OneToOne(() => Favorite, { cascade: true })
-  @JoinColumn()
-  favorite: Favorite;
+  @Field(() => [Favorite], { nullable: true })
+  @OneToMany(() => Favorite, (favorite: Favorite) => favorite.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  favorite: Favorite[];
 
   @Field(() => [Booking], { nullable: true })
   @OneToMany(() => Booking, (booking: Booking) => booking.user, {

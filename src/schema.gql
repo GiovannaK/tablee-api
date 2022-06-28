@@ -118,7 +118,7 @@ type WaitList {
 type Favorite {
   id: ID!
   user: User
-  restaurant: [Restaurant!]
+  restaurant: Restaurant
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -223,7 +223,7 @@ type Restaurant {
   acceptedPaymentMethods: [PaymentTypesPortuguese!]!
   user: [User!]
   waitlist: WaitList
-  favorite: Favorite
+  favorite: [Favorite!]
   cancellationPolicy: CancellationPolicy
   restaurantImage: [RestaurantImage!]
   menu: [Menu!]
@@ -316,7 +316,7 @@ type User {
   profile: Profile
   restaurant: [Restaurant!]
   review: [Review!]
-  favorite: Favorite
+  favorite: [Favorite!]
   booking: [Booking!]
   firstName: String!
   lastName: String!
@@ -408,6 +408,7 @@ type Query {
   findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
   findPolicyByRestaurant(restaurantId: String!): CancellationPolicy!
   getWaitListWithBookings(restaurantId: String!): WaitList!
+  getFavoritesByUser: [Favorite!]!
 }
 
 type Mutation {
@@ -447,6 +448,8 @@ type Mutation {
   updatePolicy(data: UpdatePolicyInput!): CancellationPolicy!
   createWaitListForRestaurant(restaurantId: String!): Boolean!
   createBookingByWaitList(bookingInput: CreateBookingInput!): BookingUserRestaurant!
+  createaFavorite(restaurantId: String!): Favorite!
+  deleteFavorite(favoriteId: String!): Boolean!
   finishBooking(bookingId: String!, restaurantId: String!): Booking!
 }
 

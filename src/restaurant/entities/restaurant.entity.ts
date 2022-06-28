@@ -186,11 +186,12 @@ export class Restaurant {
   @JoinColumn()
   waitlist: WaitList;
 
-  @Field(() => Favorite, { nullable: true })
-  @ManyToOne(() => Favorite, (favorite: Favorite) => favorite.restaurant, {
+  @Field(() => [Favorite], { nullable: true })
+  @OneToMany(() => Favorite, (favorite: Favorite) => favorite.restaurant, {
+    cascade: true,
     onDelete: 'CASCADE',
   })
-  favorite: Favorite;
+  favorite: Favorite[];
 
   @Field(() => CancellationPolicy, { nullable: true })
   @OneToOne(() => CancellationPolicy, { cascade: true })

@@ -2,6 +2,8 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -18,22 +20,18 @@ export class Favorite {
   id: string;
 
   @Field(() => User, { nullable: true })
-  @OneToOne(() => User, (user: User) => user.favorite, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => User, (user: User) => user.favorite, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: User;
 
-  @Field(() => [Restaurant], { nullable: true })
-  @OneToMany(
+  @Field(() => Restaurant, { nullable: true })
+  @ManyToOne(
     () => Restaurant,
     (restaurant: Restaurant) => restaurant.favorite,
-    {
-      cascade: true,
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    },
+    { onDelete: 'CASCADE' },
   )
-  restaurant: Restaurant[];
+  @JoinColumn()
+  restaurant: Restaurant;
 
   @CreateDateColumn()
   createdAt: Date;
