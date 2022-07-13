@@ -49,10 +49,6 @@ export class CreateRestaurantInput {
   @IsNotEmpty()
   isParking: boolean;
 
-  @IsBoolean()
-  @IsNotEmpty()
-  isOpen: boolean;
-
   @IsNotEmpty()
   start_hour: string;
 
@@ -68,49 +64,4 @@ export class CreateRestaurantInput {
   @IsInt()
   @IsNotEmpty()
   capacity: number;
-
-  @IsOptional()
-  brunch_start_hour: string;
-
-  @IsOptional()
-  brunch_end_hour: string;
-
-  @IsOptional()
-  lunch_start_hour: string;
-
-  @IsOptional()
-  lunch_end_hour: string;
-
-  @IsOptional()
-  dinner_start_hour: string;
-
-  @IsOptional()
-  dinner_end_hour: string;
-
-  @IsOptional()
-  brunch_start_hour_weekend: string;
-
-  @IsOptional()
-  brunch_end_hour_weekend: string;
-
-  @IsOptional()
-  lunch_start_hour_weekend: string;
-
-  @IsOptional()
-  lunch_end_hour_weekend: string;
-
-  @IsOptional()
-  dinner_start_hour_weekend: string;
-
-  @IsOptional()
-  dinner_end_hour_weekend: string;
-
-  @IsNotEmpty()
-  isAvailableForBrunch: boolean;
-
-  @IsNotEmpty()
-  isAvailableForLunch: boolean;
-
-  @IsNotEmpty()
-  isAvailableForDinner: boolean;
 }
