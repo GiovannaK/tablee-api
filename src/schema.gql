@@ -499,27 +499,11 @@ input CreateRestaurantInput {
   maxGuestQuantity: Float!
   isWifi: Boolean!
   isParking: Boolean!
-  isOpen: Boolean!
   start_hour: String!
   end_hour: String!
   weekend_start_hour: String!
   weekend_end_hour: String!
   capacity: Float!
-  brunch_start_hour: String!
-  brunch_end_hour: String!
-  lunch_start_hour: String!
-  lunch_end_hour: String!
-  dinner_start_hour: String!
-  dinner_end_hour: String!
-  brunch_start_hour_weekend: String!
-  brunch_end_hour_weekend: String!
-  lunch_start_hour_weekend: String!
-  lunch_end_hour_weekend: String!
-  dinner_start_hour_weekend: String!
-  dinner_end_hour_weekend: String!
-  isAvailableForBrunch: Boolean!
-  isAvailableForLunch: Boolean!
-  isAvailableForDinner: Boolean!
 }
 
 input UpdateRestaurantInput {
