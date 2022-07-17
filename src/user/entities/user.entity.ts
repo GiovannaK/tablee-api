@@ -55,7 +55,7 @@ export class User {
     length: 11,
     nullable: true,
   })
-  secondaryPhone: string;
+  secondaryPhone?: string;
 
   @Column({ default: false })
   isRegisteredWithGoogle: boolean;

@@ -322,7 +322,7 @@ type User {
   lastName: String!
   email: String!
   mainPhone: String!
-  secondaryPhone: String!
+  secondaryPhone: String
   isRegisteredWithGoogle: Boolean!
   loginToken: String
   expirationLoginToken: String

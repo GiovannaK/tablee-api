@@ -17,7 +17,6 @@ export class CreateUserInput {
   @IsEmail()
   email: string;
 
-  @IsOptional()
   @Field()
   @Length(10, 11)
   mainPhone?: string;
