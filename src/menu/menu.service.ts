@@ -12,6 +12,7 @@ import { RestaurantService } from '../restaurant/restaurant.service';
 import { CreateMenuItemInput } from './dto/create-menu-item.input';
 import { UpdateMenuInput } from './dto/update-menu.input';
 import { UpdateMenuItemInput } from './dto/update-menu-item.input';
+import { MenuItemCategoryPortuguese } from './enums/menuItemCategory.enum';
 
 @Injectable()
 export class MenuService {
@@ -65,6 +66,7 @@ export class MenuService {
 
     const createMenuItem = await this.menuItemRepository.create({
       ...createMenuItemInput,
+      category: MenuItemCategoryPortuguese[createMenuItemInput.category],
       menu: getCurrentMenu,
     });
 
@@ -165,6 +167,16 @@ export class MenuService {
       menu,
       menuItem: menu.menuItem,
     };
+  }
+
+  async getAllMenusWithItems(restaurantId: string) {
+    const menus = await this.menuRepository
+      .createQueryBuilder('menu')
+      .leftJoinAndSelect('menu.menuItem', 'menuItem')
+      .where('menu.restaurantId = :restaurantId', { restaurantId })
+      .getMany();
+
+    return menus;
   }
 
   async updateMenu(updateMenuInput: UpdateMenuInput, currentUser: User) {

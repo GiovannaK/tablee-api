@@ -95,21 +95,26 @@ export class MenuResolver {
     return menu;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => MenuMenuItems)
   async getMenuWithItems(@Args('menuId') menuId: string) {
     const menu = await this.menuService.getMenuWithMenuItems(menuId);
     return menu;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Query(() => [Menu])
+  async getAllRestaurantMenusWithItems(
+    @Args('restaurantId') restaurantId: string,
+  ) {
+    const menus = await this.menuService.getAllMenusWithItems(restaurantId);
+    return menus;
+  }
+
   @Query(() => Menu)
   async getMenu(@Args('menuId') menuId: string) {
     const menu = await this.menuService.getMenu(menuId);
     return menu;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => MenuItem)
   async getMenuItem(@Args('menuItemId') menuItemId: string) {
     const menu = await this.menuService.getMenuItem(menuItemId);

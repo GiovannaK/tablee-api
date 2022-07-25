@@ -38,6 +38,19 @@ export class RestaurantResolver {
     return restaurant;
   }
 
+  @Query(() => Restaurant)
+  async getRestaurantByIdWithAllRelations(
+    @Args('id') id: string,
+    @Args({ name: 'relations', type: () => [String] }) relations: string[],
+  ) {
+    const restaurant =
+      await this.restaurantService.getRestaurantByIdWithAllRelations(
+        id,
+        relations,
+      );
+    return restaurant;
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Query(() => UsersRestaurant)
   async getUsersFromRestaurant(@Args('restaurantId') restaurantId: string) {
@@ -47,13 +60,15 @@ export class RestaurantResolver {
     return restaurant;
   }
 
-  @Query(() => RestaurantsAndCount)
+  @Query(() => [Restaurant])
   async listAllRestaurants(
-    @Args({ name: 'relations', type: () => [String] }) relations: string[],
+    @Args({ name: 'take', type: () => Number }) take: number,
+    @Args({ name: 'skip', type: () => Number }) skip: number,
   ) {
     const restaurants =
       await this.restaurantService.listAllrestaurantsWithCountAndRelations(
-        relations,
+        take,
+        skip,
       );
     return restaurants;
   }

@@ -354,11 +354,6 @@ type AuthType {
   loginToken: String!
 }
 
-type RestaurantsAndCount {
-  restaurants: [Restaurant!]!
-  count: Float!
-}
-
 type UsersRestaurant {
   users: [User!]!
   count: Float!
@@ -386,17 +381,24 @@ type BookingUserRestaurant {
   booking: Booking!
 }
 
+type ReviewsAverage {
+  reviews: [Review!]!
+  average: Float!
+}
+
 type Query {
   getCurrentUser: User!
   createAccountLink(id: String!): StripeCreateAccountLink!
   createLoginLink(id: String!): StripeCreateLoginLink!
   getRestaurantById(id: String!): Restaurant!
+  getRestaurantByIdWithAllRelations(id: String!, relations: [String!]!): Restaurant!
   getUsersFromRestaurant(restaurantId: String!): UsersRestaurant!
-  listAllRestaurants(relations: [String!]!): RestaurantsAndCount!
+  listAllRestaurants(take: Float!, skip: Float!): [Restaurant!]!
   getUsersFromRole(restaurantId: String!, roles: [UserRole!]!): UsersRestaurant!
   listManagersByRestaurant(restaurantId: String!): [User!]!
   listEmployeesByRestaurant(restaurantId: String!): [User!]!
   getMenuWithItems(menuId: String!): MenuMenuItems!
+  getAllRestaurantMenusWithItems(restaurantId: String!): [Menu!]!
   getMenu(menuId: String!): Menu!
   getMenuItem(menuItemId: String!): MenuItem!
   getCurrentUserBookings: [Booking!]!
@@ -405,7 +407,7 @@ type Query {
   getRestaurantBookingsByUser: [Booking!]!
   tablesByRestaurant(restaurantId: String!): [Table!]!
   findAllReviews: [Review!]!
-  findAllReviewsByRestaurant(restaurantId: String!): [Review!]!
+  findAllReviewsByRestaurant(restaurantId: String!): ReviewsAverage!
   findPolicyByRestaurant(restaurantId: String!): CancellationPolicy!
   getWaitListWithBookings(restaurantId: String!): WaitList!
   getFavoritesByUser: [Favorite!]!

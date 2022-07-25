@@ -5,7 +5,6 @@ import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateReviewInput } from './dto/create-review.input';
 import { Review } from './entities/review.entity';
-import { RestaurantService } from 'src/restaurant/restaurant.service';
 import { BookingService } from '../booking/booking.service';
 
 @Injectable()
@@ -13,9 +12,8 @@ export class ReviewService {
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
-    private readonly restaurantService: RestaurantService,
     private readonly bookingService: BookingService,
-  ) { }
+  ) {}
 
   async createReview(createReviewInput: CreateReviewInput, currentUser: User) {
     const findBooking = await this.bookingService.getBookingWithoutRelations(
@@ -55,6 +53,12 @@ export class ReviewService {
       .where('restaurant.id = :restaurantId', { restaurantId })
       .getMany();
 
-    return reviews
+    const average =
+      reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
+
+    return {
+      reviews,
+      average
+    };
   }
 }

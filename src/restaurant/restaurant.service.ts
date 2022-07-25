@@ -9,7 +9,6 @@ import { PermissionService } from '../permission/permission.service';
 import { UpdateRestaurantInput } from '../restaurant/dto/update-restaurant.input';
 import { UserRole } from '../user/entities/role/userRole';
 import { FileService } from '../file/file.service';
-import { AvaliabilitySearch } from '../avaliability/dto/avaliability.dto';
 
 @Injectable()
 export class RestaurantService {
@@ -192,13 +191,28 @@ export class RestaurantService {
     };
   }
 
-  async listAllrestaurantsWithCountAndRelations(relations: string[]) {
-    const restaurants = await this.restaurantRepository.findAndCount({
-      relations: [...relations],
+  async listAllrestaurantsWithCountAndRelations(skip: number, take: number) {
+    const restaurants = await this.restaurantRepository
+      .createQueryBuilder('restaurant')
+      .leftJoinAndSelect('restaurant.address', 'address')
+      .leftJoinAndSelect('restaurant.restaurantImage', 'restaurantImage')
+      .orderBy('restaurant.createdAt', 'DESC')
+      .take(skip)
+      .skip(take)
+      .getMany();
+
+    return restaurants;
+  }
+
+  async getRestaurantByIdWithAllRelations(id: string, relations: string[]) {
+    const restaurant = await this.restaurantRepository.findOne(id, {
+      relations,
     });
-    return {
-      restaurants: restaurants[0],
-      count: restaurants[1],
-    };
+
+    if (!restaurant) {
+      throw new InternalServerErrorException('Cannot find restaurant');
+    }
+
+    return restaurant;
   }
 }

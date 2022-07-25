@@ -9,6 +9,7 @@ import { UserRole } from '../user/entities/role/userRole';
 import { Review } from './entities/review.entity';
 import { CreateReviewInput } from './dto/create-review.input';
 import { User } from '../user/entities/user.entity';
+import { ReviewsAverage } from './dto/review-average.output';
 
 @Resolver()
 export class ReviewResolver {
@@ -33,7 +34,7 @@ export class ReviewResolver {
     return reviews;
   }
 
-  @Query(() => [Review])
+  @Query(() => ReviewsAverage)
   async findAllReviewsByRestaurant(@Args('restaurantId') restaurantId: string) {
     const reviews = await this.reviewService.getReviewsByRestaurant(
       restaurantId,
